@@ -23,4 +23,13 @@ class Customers
 
         return new Paginator($this->requestTransport, $request);
     }
+
+    public function getOne(string $correlationID): array
+    {
+        $request = (new Request())
+            ->method("GET")
+            ->path("/customer/" . $correlationID);
+
+        return $this->requestTransport->transport($request);
+    }
 }
