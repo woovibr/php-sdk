@@ -67,10 +67,10 @@ final class RequestTest extends TestCase
 
         $requestFactory->expects($this->once())
             ->method("createRequest")
-            ->with("GET", "https://example.com/costumer?skip=100&limit=200");
+            ->with("GET", "https://example.com/customer?skip=100&limit=200");
 
         (new Request())
-            ->path("/costumer")
+            ->path("/customer")
             ->method("GET")
             ->pagination(100, 200)
             ->build("https://example.com", $requestFactory, $streamFactory);
