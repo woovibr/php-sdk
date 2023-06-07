@@ -2,12 +2,30 @@
 
 namespace Openpix\PhpSdk;
 
-use Openpix\PhpSdk\Resources\Costumers;
+use OpenPix\PhpSdk\RequestTransport;
+use OpenPix\PhpSdk\Resources\Customers;
 
 class Client
 {
-    public function costumers()
+    private RequestTransport $requestTransport;
+
+    public static function create(string $appId)
     {
-        return new Costumers();
+        return new Client(new RequestTransport($appId));
+    }
+
+    public function __construct(RequestTransport $requestTransport)
+    {
+        $this->requestTransport = $requestTransport;
+    }
+
+    public function getRequestTransport(): RequestTransport
+    {
+        return $this->requestTransport;
+    }
+
+    public function customers(): Customers
+    {
+        return new Customers($this->requestTransport);
     }
 }
