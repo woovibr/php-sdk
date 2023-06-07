@@ -32,4 +32,14 @@ class Customers
 
         return $this->requestTransport->transport($request);
     }
+
+    public function create(array $data): array
+    {
+        $request = (new Request())
+            ->method("POST")
+            ->path("/customer")
+            ->body($data);
+
+        return $this->requestTransport->transport($request);
+    }
 }
