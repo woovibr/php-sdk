@@ -1,6 +1,6 @@
 <?php
 
-namespace Openpix\PhpSdk;
+namespace OpenPix\PhpSdk;
 
 use Exception;
 
