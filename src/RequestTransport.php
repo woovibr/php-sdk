@@ -16,7 +16,7 @@ use Psr\Http\Message\StreamFactoryInterface;
  */
 class RequestTransport
 {
-    public const BASE_URI = "https://api.woovi.com/v1";
+    public const BASE_URI = "https://api.woovi.com/api/v1";
 
     public const USER_AGENT = "openpix-php-sdk";
 

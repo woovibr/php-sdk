@@ -49,7 +49,7 @@ final class CustomersTest extends TestCase
 
         $requestFactoryMock->expects($this->once())
             ->method("createRequest")
-            ->with("GET", "https://api.woovi.com/v1/customer/" . $correlationID)
+            ->with("GET", "https://api.woovi.com/api/v1/customer/" . $correlationID)
             ->willReturn($requestMock);
 
         $requestMock->expects($this->exactly(2))
@@ -101,7 +101,7 @@ final class CustomersTest extends TestCase
 
         $requestFactoryMock->expects($this->once())
             ->method("createRequest")
-            ->with("POST", "https://api.woovi.com/v1/customer")
+            ->with("POST", "https://api.woovi.com/api/v1/customer")
             ->willReturn($requestMock);
 
         $requestMock->expects($this->exactly(3))
