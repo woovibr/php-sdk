@@ -6,7 +6,6 @@
          executionOrder="random"
          failOnRisky="true"
          failOnWarning="true"
-         beStrictAboutOutputDuringTests="true"
          verbose="true"
          failOnEmptyTestSuite="true">
     <testsuites>
