@@ -4,6 +4,6 @@
 README.md         export-ignore
 .gitattributes    export-ignore
 phpstan.neon.dist export-ignore
-phpxml.xml.dist   export-ignore
+phpunit.xml.dist   export-ignore
 
 *.php diff=php
