@@ -52,6 +52,7 @@ final class RequestTransportTest extends TestCase
 
         $transport = new RequestTransport(
             $appId,
+            "https://example.com",
             $httpClientMock,
             $requestFactoryMock,
             $streamFactoryMock,
