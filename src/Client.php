@@ -5,6 +5,7 @@ namespace OpenPix\PhpSdk;
 use OpenPix\PhpSdk\RequestTransport;
 use OpenPix\PhpSdk\Resources\Charges;
 use OpenPix\PhpSdk\Resources\Customers;
+use OpenPix\PhpSdk\Resources\Transactions;
 
 class Client
 {
@@ -35,5 +36,10 @@ class Client
     public function charges(): Charges
     {
         return new Charges($this->requestTransport);
+    }
+
+    public function transactions(): Transactions
+    {
+        return new Transactions($this->requestTransport);
     }
 }
