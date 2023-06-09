@@ -2,6 +2,7 @@
 
 namespace Tests;
 
+use DateTimeImmutable;
 use OpenPix\PhpSdk\Request;
 use OpenPix\PhpSdk\RequestTransport;
 use OpenPix\PhpSdk\Resources\Transactions;
@@ -29,5 +30,28 @@ final class TransactionsTest extends TestCase
         $result = $transactions->getOne(1);
 
         $this->assertSame($result, ["transaction" => []]);
+    }
+
+    public function testList(): void
+    {
+        $requestTransportMock = $this->createMock(RequestTransport::class);
+
+        $params = [
+            "withdrawal" => "withdrawalId",
+            "pixQrCode" => "pixQrCodeId",
+            "charge" => "chargeId",
+            "start" => "startDate",
+            "end" => "endDate",
+            "skip" => 10,
+            "limit" => 50,
+        ];
+
+        $transactions = new Transactions($requestTransportMock);
+        $pagedRequest = $transactions->list($params)->perPage(50)->skip(10)->getPagedRequest();
+
+        $this->assertSame($pagedRequest->getPath(), "/transaction");
+        $this->assertSame($pagedRequest->getMethod(), "GET");
+        $this->assertSame($pagedRequest->getBody(), null);
+        $this->assertSame($pagedRequest->getQueryParams(), $params);
     }
 }
