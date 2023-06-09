@@ -183,4 +183,13 @@ final class ChargesTest extends TestCase
 
         $this->assertSame($result, ["id" => $chargeId]);
     }
+
+    public function testGetQrCodeImageLink()
+    {
+        $charges = new Charges($this->createStub(RequestTransport::class));
+
+        $result = $charges->getQrCodeImageLink("123456", 256);
+
+        $this->assertSame("https://api.woovi.com/openpix/charge/brcode/image/123456.png?size=256", $result);
+    }
 }

@@ -53,4 +53,9 @@ class Charges
 
         return $this->requestTransport->transport($request);
     }
+
+    public function getQrCodeImageLink(string $paymentLinkId, int $size = 768): string
+    {
+        return "https://api.woovi.com/openpix/charge/brcode/image/" . $paymentLinkId . ".png?size=" . $size;
+    }
 }
