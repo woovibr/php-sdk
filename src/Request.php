@@ -67,7 +67,7 @@ class Request
         $uri = $baseUri . $this->path;
 
         if (!empty($this->queryParams)) {
-            $uri .= "?" . http_build_query($this->queryParams);
+            $uri .= "?" . http_build_query($this->normalizeQueryParams($this->queryParams));
         }
 
         $request = $requestFactory->createRequest($this->method, $uri);
@@ -91,5 +91,18 @@ class Request
         }
 
         return $request->withBody($this->body);
+    }
+
+    private function normalizeQueryParams(array $queryParams): array
+    {
+        foreach ($queryParams as $name => $value) {
+            if (is_bool($value)) {
+                $value = $value ? "true" : "false";
+            }
+
+            $queryParams[$name] = $value;
+        }
+
+        return $queryParams;
     }
 }
