@@ -44,4 +44,13 @@ class Charges
 
         return $this->requestTransport->transport($request);
     }
+
+    public function delete(string $id): array
+    {
+        $request = (new Request())
+            ->method("DELETE")
+            ->path("/charge/" . $id);
+
+        return $this->requestTransport->transport($request);
+    }
 }
