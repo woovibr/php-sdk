@@ -2,191 +2,97 @@
 
 namespace Tests;
 
+use OpenPix\PhpSdk\Request;
 use OpenPix\PhpSdk\RequestTransport;
 use OpenPix\PhpSdk\Resources\Charges;
 use PHPUnit\Framework\TestCase;
-use Psr\Http\Client\ClientInterface;
-use Psr\Http\Message\RequestFactoryInterface;
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\StreamFactoryInterface;
-use Psr\Http\Message\StreamInterface;
 
 final class ChargesTest extends TestCase
 {
     public function testGetOne(): void
     {
-        $requestFactoryMock = $this->createMock(RequestFactoryInterface::class);
-        $streamFactoryMock = $this->createMock(StreamFactoryInterface::class);
-        $httpClientMock = $this->createMock(ClientInterface::class);
-        $requestMock = $this->createMock(RequestInterface::class);
-        $responseMock = $this->createMock(ResponseInterface::class);
-        $streamMock = $this->createMock(StreamInterface::class);
+        $charge = [["charge" => ["value" => 50]]];
 
-        $requestTransport = new RequestTransport(
-            "app id",
-            $httpClientMock,
-            $requestFactoryMock,
-            $streamFactoryMock,
-        );
+        $requestTransportMock = $this->createMock(RequestTransport::class);
+        $requestTransportMock->expects($this->once())
+            ->method("transport")
+            ->willReturnCallback(function (Request $request) use ($charge) {
+                $this->assertSame("GET", $request->getMethod());
+                $this->assertSame("/charge/abcd", $request->getPath());
+                $this->assertSame($request->getBody(), null);
+                $this->assertSame($request->getQueryParams(), []);
 
-        $chargeId = "fe7834b4060c488a9b0f89811be5f5cf";
+                return $charge;
+            });
 
-        $requestFactoryMock->expects($this->once())
-            ->method("createRequest")
-            ->with("GET", "https://api.woovi.com/api/v1/charge/" . $chargeId)
-            ->willReturn($requestMock);
+        $charges = new Charges($requestTransportMock);
+        $result = $charges->getOne("abcd");
 
-        $requestMock->expects($this->exactly(2))
-            ->method("withAddedHeader")
-            ->willReturnSelf();
-
-        $httpClientMock->expects($this->once())
-            ->method("sendRequest")
-            ->with($requestMock)
-            ->willReturn($responseMock);
-
-        $responseMock->expects($this->once())
-            ->method("getBody")
-            ->willReturn($streamMock);
-
-        $streamMock->expects($this->once())
-            ->method("getContents")
-            ->willReturn(json_encode(["charge" => []]));
-
-        $charges = new Charges($requestTransport);
-
-        $result = $charges->getOne($chargeId);
-
-        $this->assertSame($result, ["charge" => []]);
+        $this->assertSame($result, $charge);
     }
 
     public function testCreate(): void
     {
-        $requestFactoryMock = $this->createMock(RequestFactoryInterface::class);
-        $streamFactoryMock = $this->createMock(StreamFactoryInterface::class);
-        $httpClientMock = $this->createMock(ClientInterface::class);
-        $requestMock = $this->createMock(RequestInterface::class);
-        $requestStreamMock = $this->createMock(StreamInterface::class);
-        $responseMock = $this->createMock(ResponseInterface::class);
-        $responseStreamMock = $this->createMock(StreamInterface::class);
-
-        $requestTransport = new RequestTransport(
-            "app id",
-            $httpClientMock,
-            $requestFactoryMock,
-            $streamFactoryMock,
-        );
-
-        $charge = [
-            "correlationID" => "fe7834b4060c488a9b0f89811be5f5cf",
+        $requestBody = [
+            "correlationID" => "abcd",
             "value" => 100,
         ];
 
-        $requestFactoryMock->expects($this->once())
-            ->method("createRequest")
-            ->with("POST", "https://api.woovi.com/api/v1/charge?return_existing=true")
-            ->willReturn($requestMock);
+        $requestTransportMock = $this->createMock(RequestTransport::class);
+        $requestTransportMock->expects($this->once())
+            ->method("transport")
+            ->willReturnCallback(function (Request $request) use ($requestBody) {
+                $this->assertSame("POST", $request->getMethod());
+                $this->assertSame("/charge", $request->getPath());
+                $this->assertSame($request->getBody(), $requestBody);
+                $this->assertSame($request->getQueryParams(), [
+                    "return_existing" => true,
+                ]);
 
-        $requestMock->expects($this->exactly(3))
-            ->method("withAddedHeader")
-            ->willReturnSelf();
+                return ["correlationID" => "abcd"];
+            });
 
-        $streamFactoryMock->expects($this->once())
-            ->method("createStream")
-            ->with(json_encode($charge))
-            ->willReturn($requestStreamMock);
+        $charges = new Charges($requestTransportMock);
+        $result = $charges->create($requestBody, true);
 
-        $requestMock->expects($this->once())
-            ->method("withBody")
-            ->with($requestStreamMock)
-            ->willReturnSelf();
-
-        $httpClientMock->expects($this->once())
-            ->method("sendRequest")
-            ->with($requestMock)
-            ->willReturn($responseMock);
-
-        $responseMock->expects($this->once())
-            ->method("getBody")
-            ->willReturn($responseStreamMock);
-
-        $responseStreamMock->expects($this->once())
-            ->method("getContents")
-            ->willReturn(json_encode($charge));
-
-        $charges = new Charges($requestTransport);
-
-        $result = $charges->create($charge, true);
-
-        $this->assertSame($result, $charge);
+        $this->assertSame(["correlationID" => "abcd"], $result);
     }
 
     public function testList(): void
     {
         $requestTransportMock = $this->createMock(RequestTransport::class);
-        $requestFactoryMock = $this->createMock(RequestFactoryInterface::class);
-        $streamFactoryMock = $this->createMock(StreamFactoryInterface::class);
-
-        $requestFactoryMock->expects($this->once())
-            ->method("createRequest")
-            ->with("GET", $this->stringContains("https://example.com/charge"));
 
         $charges = new Charges($requestTransportMock);
+        $pagedRequest = $charges->list()->getPagedRequest();
 
-        $charges->list()->getPagedRequest()->build("https://example.com", $requestFactoryMock, $streamFactoryMock);
+        $this->assertSame($pagedRequest->getPath(), "/charge");
+        $this->assertSame($pagedRequest->getMethod(), "GET");
+        $this->assertSame($pagedRequest->getBody(), null);
     }
 
     public function testDelete(): void
     {
-        $requestFactoryMock = $this->createMock(RequestFactoryInterface::class);
-        $streamFactoryMock = $this->createMock(StreamFactoryInterface::class);
-        $httpClientMock = $this->createMock(ClientInterface::class);
-        $requestMock = $this->createMock(RequestInterface::class);
-        $responseMock = $this->createMock(ResponseInterface::class);
-        $streamMock = $this->createMock(StreamInterface::class);
+        $requestTransportMock = $this->createMock(RequestTransport::class);
+        $requestTransportMock->expects($this->once())
+            ->method("transport")
+            ->willReturnCallback(function (Request $request) {
+                $this->assertSame("DELETE", $request->getMethod());
+                $this->assertSame("/charge/abcd", $request->getPath());
+                $this->assertSame($request->getBody(), null);
+                $this->assertSame($request->getQueryParams(), []);
 
-        $requestTransport = new RequestTransport(
-            "app id",
-            $httpClientMock,
-            $requestFactoryMock,
-            $streamFactoryMock,
-        );
+                return ["id" => "abcd"];
+            });
 
-        $chargeId = "fe7834b4060c488a9b0f89811be5f5cf";
+        $charges = new Charges($requestTransportMock);
+        $result = $charges->delete("abcd");
 
-        $requestFactoryMock->expects($this->once())
-            ->method("createRequest")
-            ->with("GET", "https://api.woovi.com/api/v1/charge/" . $chargeId)
-            ->willReturn($requestMock);
-
-        $requestMock->expects($this->exactly(2))
-            ->method("withAddedHeader")
-            ->willReturnSelf();
-
-        $httpClientMock->expects($this->once())
-            ->method("sendRequest")
-            ->with($requestMock)
-            ->willReturn($responseMock);
-
-        $responseMock->expects($this->once())
-            ->method("getBody")
-            ->willReturn($streamMock);
-
-        $streamMock->expects($this->once())
-            ->method("getContents")
-            ->willReturn(json_encode(["id" => $chargeId]));
-
-        $charges = new Charges($requestTransport);
-
-        $result = $charges->getOne($chargeId);
-
-        $this->assertSame($result, ["id" => $chargeId]);
+        $this->assertSame($result, ["id" => "abcd"]);
     }
 
     public function testGetQrCodeImageLink()
     {
-        $charges = new Charges($this->createStub(RequestTransport::class));
+        $charges = new Charges($this->createMock(RequestTransport::class));
 
         $result = $charges->getQrCodeImageLink("123456", 256);
 
