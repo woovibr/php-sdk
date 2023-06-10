@@ -31,16 +31,31 @@ class Request
         return $this;
     }
 
+    public function getMethod(): string
+    {
+        return $this->method;
+    }
+
     public function path(string $path): self
     {
         $this->path = $path;
         return $this;
     }
 
+    public function getPath(): string
+    {
+        return $this->path;
+    }
+
     public function queryParams(array $queryParams): self
     {
         $this->queryParams = $queryParams;
         return $this;
+    }
+
+    public function getQueryParams(): array
+    {
+        return $this->queryParams;
     }
 
     /**
@@ -50,6 +65,14 @@ class Request
     {
         $this->body = $body;
         return $this;
+    }
+
+    /**
+     * @return array|\Psr\Http\Message\StreamInterface|string
+     */
+    public function getBody()
+    {
+        return $this->body;
     }
 
     public function pagination(int $skip, int $limit): self
