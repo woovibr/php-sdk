@@ -38,6 +38,11 @@ class Client
         return new Charges($this->requestTransport);
     }
 
+    public function payments(): Payments
+    {
+        return new Payments($this->requestTransport);
+    }
+
     public function webhooks(): Webhooks
     {
         return new Webhooks($this->requestTransport);
