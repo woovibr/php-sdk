@@ -17,7 +17,9 @@
         "php": "^7.4 || ^8.0",
         "php-http/discovery": "^1.18",
         "psr/http-client": "^1.0",
+        "psr/http-client-implementation": "*",
         "psr/http-factory": "^1.0",
+        "psr/http-factory-implementation": "*",
         "psr/http-message": "^2.0"
     },
     "require-dev": {
@@ -34,7 +36,7 @@
     "config": {
         "sort-packages": true,
         "allow-plugins": {
-            "php-http/discovery": true
+            "php-http/discovery": false
         }
     }
 }
