@@ -15,6 +15,9 @@ class Customers
         $this->requestTransport = $requestTransport;
     }
 
+    /**
+     * @return Paginator
+     */
     public function list(): Paginator
     {
         $request = (new Request())
@@ -24,6 +27,9 @@ class Customers
         return new Paginator($this->requestTransport, $request);
     }
 
+    /**
+     * @return array<mixed>
+     */
     public function getOne(string $correlationID): array
     {
         $request = (new Request())
@@ -33,6 +39,10 @@ class Customers
         return $this->requestTransport->transport($request);
     }
 
+    /**
+     * @param array<mixed> $data
+     * @return array<mixed>
+     */
     public function create(array $data): array
     {
         $request = (new Request())

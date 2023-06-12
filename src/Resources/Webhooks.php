@@ -15,6 +15,9 @@ class Webhooks
         $this->requestTransport = $requestTransport;
     }
 
+    /**
+     * @return Paginator
+     */
     public function list(string $filterByUrl = ""): Paginator
     {
         $request = (new Request())
@@ -25,6 +28,9 @@ class Webhooks
         return new Paginator($this->requestTransport, $request);
     }
 
+    /**
+     * @return array<mixed>
+     */
     public function delete(string $webhookID): array
     {
         $request = (new Request())
@@ -34,6 +40,10 @@ class Webhooks
         return $this->requestTransport->transport($request);
     }
 
+    /**
+     * @param array<mixed> $webhook
+     * @return array<mixed>
+     */
     public function create(array $webhook): array
     {
         $request = (new Request())

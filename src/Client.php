@@ -8,6 +8,7 @@ use OpenPix\PhpSdk\Resources\Customers;
 use OpenPix\PhpSdk\Resources\Transactions;
 use OpenPix\PhpSdk\Resources\Subscriptions;
 use OpenPix\PhpSdk\Resources\Webhooks;
+use OpenPix\PhpSdk\Resources\Payments;
 
 class Client
 {
@@ -15,9 +16,9 @@ class Client
 
     private RequestTransport $requestTransport;
 
-    public static function create(string $appId, string $baseUri = self::BASE_URI)
+    public static function create(string $appId, string $baseUri = self::BASE_URI): self
     {
-        return new Client(new RequestTransport($appId, $baseUri));
+        return new self(new RequestTransport($appId, $baseUri));
     }
 
     public function __construct(RequestTransport $requestTransport)
@@ -44,7 +45,7 @@ class Client
     {
         return new Transactions($this->requestTransport);
     }
-  
+
     public function subscriptions(): Subscriptions
     {
         return new Subscriptions($this->requestTransport);

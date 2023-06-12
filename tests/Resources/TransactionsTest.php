@@ -10,7 +10,7 @@ use PHPUnit\Framework\TestCase;
 
 final class TransactionsTest extends TestCase
 {
-    public function testGetOne()
+    public function testGetOne(): void
     {
         $requestTransportMock = $this->createMock(RequestTransport::class);
 
@@ -18,7 +18,7 @@ final class TransactionsTest extends TestCase
             ->method("transport")
             ->willReturnCallback(function (Request $request) {
                 $this->assertSame("GET", $request->getMethod());
-                $this->assertSame("/transaction/1", $request->getPath());
+                $this->assertSame("/transaction/transactionId", $request->getPath());
                 $this->assertSame($request->getBody(), null);
                 $this->assertSame($request->getQueryParams(), []);
 
@@ -27,7 +27,7 @@ final class TransactionsTest extends TestCase
 
         $transactions = new Transactions($requestTransportMock);
 
-        $result = $transactions->getOne(1);
+        $result = $transactions->getOne("transactionId");
 
         $this->assertSame($result, ["transaction" => []]);
     }

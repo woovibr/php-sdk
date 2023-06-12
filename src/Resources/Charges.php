@@ -15,6 +15,10 @@ class Charges
         $this->requestTransport = $requestTransport;
     }
 
+    /**
+     * @param array<mixed> $params
+     * @return Paginator
+     */
     public function list(array $params = []): Paginator
     {
         $request = (new Request())
@@ -25,6 +29,9 @@ class Charges
         return new Paginator($this->requestTransport, $request);
     }
 
+    /**
+     * @return array<mixed>
+     */
     public function getOne(string $id): array
     {
         $request = (new Request())
@@ -34,6 +41,10 @@ class Charges
         return $this->requestTransport->transport($request);
     }
 
+    /**
+     * @param array<mixed> $charge
+     * @return array<mixed>
+     */
     public function create(array $charge, bool $returnExisting = true): array
     {
         $request = (new Request())
@@ -45,6 +56,9 @@ class Charges
         return $this->requestTransport->transport($request);
     }
 
+    /**
+     * @return array<mixed>
+     */
     public function delete(string $id): array
     {
         $request = (new Request())

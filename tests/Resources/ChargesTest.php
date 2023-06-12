@@ -90,7 +90,7 @@ final class ChargesTest extends TestCase
         $this->assertSame($result, ["id" => "abcd"]);
     }
 
-    public function testGetQrCodeImageLink()
+    public function testGetQrCodeImageLink(): void
     {
         $charges = new Charges($this->createMock(RequestTransport::class));
 

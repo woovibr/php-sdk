@@ -22,7 +22,7 @@ final class CustomersTest extends TestCase
         $this->assertSame($pagedRequest->getBody(), null);
     }
 
-    public function testGetOne()
+    public function testGetOne(): void
     {
         $correlationID = "fe7834b4060c488a9b0f89811be5f5cf";
         $customer = [
@@ -50,7 +50,7 @@ final class CustomersTest extends TestCase
         $this->assertSame($result, $customer);
     }
 
-    public function testCreate()
+    public function testCreate(): void
     {
         $customer = [
             "customer" => [

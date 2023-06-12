@@ -3,11 +3,12 @@
 namespace OpenPix\PhpSdk;
 
 use OpenPix\PhpSdk\Request;
+use TypeError;
 
 /**
  * Pagination wrapper for listing requests.
  *
- * @template Result
+ * @phpstan-type Pagination array{skip: int, limit: int, totalCount: int, hasPreviousPage: bool, hasNextPage: bool}
  */
 class Paginator
 {
@@ -16,7 +17,7 @@ class Paginator
     private Request $listRequest;
 
     /**
-     * @var Result
+     * @var array<mixed>|null
      */
     private ?array $lastResult;
 
@@ -24,6 +25,9 @@ class Paginator
 
     private int $perPage = 30;
 
+    /**
+     * @param array<mixed>|null $lastResult
+     */
     public function __construct(
         RequestTransport $requestTransport,
         Request $listRequest,
@@ -47,7 +51,7 @@ class Paginator
     }
 
     /**
-     * @return Result
+     * @return array<mixed>
      */
     public function next(): array
     {
@@ -56,7 +60,7 @@ class Paginator
     }
 
     /**
-     * @return Result
+     * @return array<mixed>
      */
     public function previous(): array
     {
@@ -65,7 +69,7 @@ class Paginator
     }
 
     /**
-     * @return Result
+     * @return array<mixed>
      */
     public function go(int $page): array
     {
@@ -76,7 +80,7 @@ class Paginator
     /**
      * Send request to the list endpoint using current parameters.
      *
-     * @return Result
+     * @return array<mixed>
      */
     public function sendRequest(): array
     {
@@ -88,13 +92,19 @@ class Paginator
         return $this->listRequest->pagination($this->skip, $this->perPage);
     }
 
+    /**
+     * @return Pagination
+     */
     private function getPagination(): array
     {
-        if (is_null($this->lastResult)) {
-            return $this->sendRequest()["pageInfo"];
+        $lastResult = $this->lastResult ?? $this->sendRequest();
+
+        if (empty($lastResult["pageInfo"])) {
+            throw new TypeError("The request to the endpoint does not support paging.");
         }
 
-        return $this->lastResult["pageInfo"];
+        /** @var array{pageInfo: Pagination} $lastResult */
+        return $lastResult["pageInfo"];
     }
 
     public function getTotalCount(): int

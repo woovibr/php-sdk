@@ -15,6 +15,9 @@ class Transactions
         $this->requestTransport = $requestTransport;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function getOne(string $transactionID): array
     {
         $request = (new Request())
@@ -24,6 +27,10 @@ class Transactions
         return $this->requestTransport->transport($request);
     }
 
+    /**
+     * @param array<string, mixed> $queryParams
+     * @return Paginator
+     */
     public function list(array $queryParams): Paginator
     {
         $request = (new Request())

@@ -2,8 +2,6 @@
 
 namespace OpenPix\PhpSdk;
 
-use DateTime;
-use DateTimeInterface;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\StreamFactoryInterface;
@@ -18,10 +16,13 @@ class Request
 
     private string $method;
 
+    /**
+     * @var array<mixed>
+     */
     private array $queryParams = [];
 
     /**
-     * @var array|\Psr\Http\Message\StreamInterface|null
+     * @var array<mixed>|\Psr\Http\Message\StreamInterface|null
      */
     private $body = null;
 
@@ -47,19 +48,25 @@ class Request
         return $this->path;
     }
 
+    /**
+     * @param array<string, mixed> $queryParams
+     */
     public function queryParams(array $queryParams): self
     {
         $this->queryParams = $queryParams;
         return $this;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function getQueryParams(): array
     {
         return $this->queryParams;
     }
 
     /**
-     * @var array|\Psr\Http\Message\StreamInterface|string $body
+     * @param array<mixed>|\Psr\Http\Message\StreamInterface $body
      */
     public function body($body): self
     {
@@ -68,7 +75,7 @@ class Request
     }
 
     /**
-     * @return array|\Psr\Http\Message\StreamInterface|string
+     * @return array<mixed>|\Psr\Http\Message\StreamInterface|null
      */
     public function getBody()
     {
@@ -116,6 +123,10 @@ class Request
         return $request->withBody($this->body);
     }
 
+    /**
+     * @param array<mixed> $queryParams
+     * @return array<mixed>
+     */
     private function normalizeQueryParams(array $queryParams): array
     {
         foreach ($queryParams as $name => $value) {

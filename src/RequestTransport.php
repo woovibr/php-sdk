@@ -2,6 +2,7 @@
 
 namespace OpenPix\PhpSdk;
 
+use TypeError;
 use Http\Discovery\Psr17FactoryDiscovery;
 use Http\Discovery\Psr18ClientDiscovery;
 use Psr\Http\Client\ClientInterface;
@@ -47,7 +48,7 @@ class RequestTransport
      *
      * @param Request|RequestInterface $request
      *
-     * @return array Decoded response data
+     * @return array<mixed> Decoded response data
      */
     public function transport($request): array
     {
@@ -68,9 +69,16 @@ class RequestTransport
             ->withAddedHeader("Authorization", $this->appId);
     }
 
+    /**
+     * @return array<mixed>
+     */
     private function hydrateResponse(ResponseInterface $response): array
     {
         $contents = json_decode($response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR);
+
+        if (!is_array($contents)) {
+            throw new TypeError("Invalid response from API.");
+        }
 
         if (!empty($contents["error"])) {
             throw new ApiErrorException($contents["error"]);

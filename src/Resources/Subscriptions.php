@@ -14,6 +14,9 @@ class Subscriptions
         $this->requestTransport = $requestTransport;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function getOne(string $subscriptionID): array
     {
         $request = (new Request())
@@ -23,6 +26,10 @@ class Subscriptions
         return $this->requestTransport->transport($request);
     }
 
+    /**
+     * @param array<string, mixed> $subscription
+     * @return array<string, mixed>
+     */
     public function create(array $subscription): array
     {
         $request = (new Request())

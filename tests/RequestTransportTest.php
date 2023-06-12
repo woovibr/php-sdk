@@ -17,7 +17,7 @@ final class RequestTransportTest extends TestCase
     {
         $appId = "app id";
 
-        $requestMock = $this->createStub(RequestInterface::class);
+        $requestMock = $this->createMock(RequestInterface::class);
         $responseMock = $this->createMock(ResponseInterface::class);
         $streamMock = $this->createMock(StreamInterface::class);
 
