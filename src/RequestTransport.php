@@ -36,6 +36,7 @@ class RequestTransport
         ?StreamFactoryInterface $streamFactory = null
     ) {
         $this->appId = $appId;
+        $this->baseUri = $baseUri;
         $this->httpClient = $httpClient ?? Psr18ClientDiscovery::find();
         $this->requestFactory = $requestFactory ?? Psr17FactoryDiscovery::findRequestFactory();
         $this->streamFactory = $streamFactory ?? Psr17FactoryDiscovery::findStreamFactory();
