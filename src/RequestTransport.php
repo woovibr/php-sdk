@@ -16,8 +16,6 @@ use Psr\Http\Message\StreamFactoryInterface;
  */
 class RequestTransport
 {
-    public const BASE_URI = "https://api.woovi.com/api/v1";
-
     public const USER_AGENT = "openpix-php-sdk";
 
     private ClientInterface $httpClient;
@@ -28,13 +26,17 @@ class RequestTransport
 
     private string $appId;
 
+    private string $baseUri;
+
     public function __construct(
         string $appId,
+        string $baseUri,
         ?ClientInterface $httpClient = null,
         ?RequestFactoryInterface $requestFactory = null,
         ?StreamFactoryInterface $streamFactory = null
     ) {
         $this->appId = $appId;
+        $this->baseUri = $baseUri;
         $this->httpClient = $httpClient ?? Psr18ClientDiscovery::find();
         $this->requestFactory = $requestFactory ?? Psr17FactoryDiscovery::findRequestFactory();
         $this->streamFactory = $streamFactory ?? Psr17FactoryDiscovery::findStreamFactory();
@@ -50,7 +52,7 @@ class RequestTransport
     public function transport($request): array
     {
         if (! ($request instanceof RequestInterface)) {
-            $request = $request->build(self::BASE_URI, $this->requestFactory, $this->streamFactory);
+            $request = $request->build($this->baseUri, $this->requestFactory, $this->streamFactory);
         }
 
         $request = $this->withRequestDefaultParameters($request);
