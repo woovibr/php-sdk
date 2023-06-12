@@ -5,6 +5,7 @@ namespace OpenPix\PhpSdk;
 use OpenPix\PhpSdk\RequestTransport;
 use OpenPix\PhpSdk\Resources\Charges;
 use OpenPix\PhpSdk\Resources\Customers;
+use OpenPix\PhpSdk\Resources\Transactions;
 use OpenPix\PhpSdk\Resources\Subscriptions;
 use OpenPix\PhpSdk\Resources\Webhooks;
 
@@ -39,6 +40,11 @@ class Client
         return new Charges($this->requestTransport);
     }
 
+    public function transactions(): Transactions
+    {
+        return new Transactions($this->requestTransport);
+    }
+  
     public function subscriptions(): Subscriptions
     {
         return new Subscriptions($this->requestTransport);
