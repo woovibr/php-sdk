@@ -15,21 +15,20 @@ final class RequestTransportTest extends TestCase
 {
     public function testTransport(): void
     {
-        $appId = "app id";
+        $expectedResult = ["data" => "hello, world."];
+        $streamMock = $this->createConfiguredMock(StreamInterface::class, [
+            "getContents" => json_encode($expectedResult),
+        ]);
+        $responseMock = $this->createConfiguredMock(ResponseInterface::class, [
+            "getBody" => $streamMock,
+        ]);
 
         $requestMock = $this->createMock(RequestInterface::class);
-        $responseMock = $this->createMock(ResponseInterface::class);
-        $streamMock = $this->createMock(StreamInterface::class);
-
-        $httpClientMock = $this->createMock(ClientInterface::class);
-        $requestFactoryMock = $this->createMock(RequestFactoryInterface::class);
-        $streamFactoryMock = $this->createMock(StreamFactoryInterface::class);
-
         $requestMock->expects($this->exactly(2))
             ->method("withAddedHeader")
-            ->willReturnCallback(function ($header, $value) use ($requestMock, $appId) {
+            ->willReturnCallback(function ($header, $value) use ($requestMock) {
                 if ($header === "Authorization") {
-                    $this->assertSame($value, $appId);
+                    $this->assertSame($value, "appId");
                 } elseif ($header !== "User-Agent") {
                     $this->assertSame($header, "User-Agent");
                 }
@@ -37,31 +36,20 @@ final class RequestTransportTest extends TestCase
                 return $requestMock;
             });
 
-        $streamMock->expects($this->once())
-            ->method("getContents")
-            ->willReturn(json_encode(["data" => "hello, world."]));
-
-        $responseMock->expects($this->once())
-            ->method("getBody")
-            ->willReturn($streamMock);
-
+        $httpClientMock = $this->createMock(ClientInterface::class);
         $httpClientMock->expects($this->once())
             ->method("sendRequest")
             ->with($requestMock)
             ->willReturn($responseMock);
 
-        $transport = new RequestTransport(
-            $appId,
+        $requestTransport = new RequestTransport(
+            "appId",
             "https://example.com",
             $httpClientMock,
-            $requestFactoryMock,
-            $streamFactoryMock,
+            $this->createMock(RequestFactoryInterface::class),
+            $this->createMock(StreamFactoryInterface::class),
         );
 
-        $result = $transport->transport($requestMock);
-
-        $this->assertSame($result, [
-            "data" => "hello, world."
-        ]);
+        $this->assertSame($requestTransport->transport($requestMock), $expectedResult);
     }
 }
