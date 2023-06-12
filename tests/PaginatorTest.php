@@ -41,47 +41,35 @@ final class PaginatorTest extends TestCase
 
     public function testNext(): void
     {
-        $requestTransportMock = $this->createMock(RequestTransport::class);
-        $listRequestMock = $this->createMock(Request::class);
-
-        $requestTransportMock->expects($this->once())
-            ->method("transport")
-            ->with($listRequestMock);
-
-        $listRequestMock->expects($this->once())
-            ->method("pagination")
-            ->with(170, 50)
-            ->willReturn($listRequestMock);
-
-        $paginator = new Paginator($requestTransportMock, $listRequestMock);
-
-        $paginator->perPage(50)
+        $this->getPaginatorForNavigationTests(170, 50)
+            ->perPage(50)
             ->skip(120)
             ->next();
     }
 
     public function testPrevious(): void
     {
-        $requestTransportMock = $this->createMock(RequestTransport::class);
-        $listRequestMock = $this->createMock(Request::class);
-
-        $requestTransportMock->expects($this->once())
-            ->method("transport")
-            ->with($listRequestMock);
-
-        $listRequestMock->expects($this->once())
-            ->method("pagination")
-            ->with(120, 50)
-            ->willReturn($listRequestMock);
-
-        $paginator = new Paginator($requestTransportMock, $listRequestMock);
-
-        $paginator->perPage(50)
+        $this->getPaginatorForNavigationTests(120, 50)
+            ->perPage(50)
             ->skip(170)
             ->previous();
     }
 
     public function testGo(): void
+    {
+        $this->getPaginatorForNavigationTests()
+            ->perPage(50)
+            ->skip(0)
+            ->go(1);
+    }
+
+    /**
+     * Get a paginator with expectations set regarding the "skip" and "limit"
+     * parameters of the requests.
+     *
+     * Must run the method under test when you get the paginator (the "Act" of AAA).
+     */
+    private function getPaginatorForNavigationTests(int $expectedSkip = 50, int $expectedLimit = 50): Paginator
     {
         $requestTransportMock = $this->createMock(RequestTransport::class);
         $listRequestMock = $this->createMock(Request::class);
@@ -92,13 +80,11 @@ final class PaginatorTest extends TestCase
 
         $listRequestMock->expects($this->once())
             ->method("pagination")
-            ->with(50, 50)
+            ->with($expectedSkip, $expectedLimit)
             ->willReturn($listRequestMock);
 
         $paginator = new Paginator($requestTransportMock, $listRequestMock);
 
-        $paginator->perPage(50)
-            ->skip(0)
-            ->go(1);
+        return $paginator;
     }
 }
