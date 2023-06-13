@@ -9,6 +9,7 @@ use OpenPix\PhpSdk\Resources\Transactions;
 use OpenPix\PhpSdk\Resources\Subscriptions;
 use OpenPix\PhpSdk\Resources\Webhooks;
 use OpenPix\PhpSdk\Resources\Payments;
+use OpenPix\PhpSdk\Resources\Refunds;
 
 class Client
 {
@@ -45,7 +46,7 @@ class Client
     {
         return new Refunds($this->requestTransport);
     }
-  
+
     public function transactions(): Transactions
     {
         return new Transactions($this->requestTransport);

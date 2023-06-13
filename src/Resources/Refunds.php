@@ -15,6 +15,9 @@ class Refunds
         $this->requestTransport = $requestTransport;
     }
 
+    /**
+     * @param array<mixed> $params
+     */
     public function list(array $params = []): Paginator
     {
         $request = (new Request())
@@ -25,6 +28,9 @@ class Refunds
         return new Paginator($this->requestTransport, $request);
     }
 
+    /**
+     * @return array<mixed>
+     */
     public function getOne(string $refundID): array
     {
         $request = (new Request())
@@ -34,6 +40,10 @@ class Refunds
         return $this->requestTransport->transport($request);
     }
 
+    /**
+     * @param array<mixed> $refund
+     * @return array<mixed>
+     */
     public function create(array $refund): array
     {
         $request = (new Request())
