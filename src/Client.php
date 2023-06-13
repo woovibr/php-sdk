@@ -41,6 +41,11 @@ class Client
         return new Charges($this->requestTransport);
     }
 
+    public function refunds(): Refunds
+    {
+        return new Refunds($this->requestTransport);
+    }
+  
     public function transactions(): Transactions
     {
         return new Transactions($this->requestTransport);
