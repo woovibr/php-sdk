@@ -50,12 +50,28 @@ class Paginator implements Iterator
     }
 
     /**
+     * Get maxium amount of resources per page.
+     */
+    public function getPerPageCount(): int
+    {
+        return $this->perPage;
+    }
+
+    /**
      * Skips an amount of resources.
      */
     public function skip(int $skip): self
     {
         $this->skip = $skip;
         return $this;
+    }
+
+    /**
+     * Get amount of resources skipped.
+     */
+    public function getSkippedCount(): int
+    {
+        return $this->skip;
     }
 
     /**

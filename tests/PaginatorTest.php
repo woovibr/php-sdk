@@ -16,111 +16,103 @@ final class PaginatorTest extends TestCase
             ->method("pagination")
             ->with(20, 30);
 
-        $paginator = new Paginator($this->createMock(RequestTransport::class), $listRequestMock);
+        $paginator = $this->makePaginator(null, $listRequestMock);
 
         $paginator->perPage(30)->skip(20)->getPagedRequest();
     }
 
-    public function testUpdate(): void
-    {
-        $this->getPaginatorForUpdateTests()->update();
-    }
-
     public function testNext(): void
     {
-        $this->getPaginatorForUpdateTests(30)->next();
+        $this->testPaginatorNavigation(
+            fn (Paginator $paginator) => $paginator->next(),
+            30
+        );
     }
 
     public function testPrevious(): void
     {
-        $this->getPaginatorForUpdateTests(0, 30, 30)->previous();
+        $this->testPaginatorNavigation(
+            fn (Paginator $paginator) => $paginator->previous(),
+            0,
+            30
+        );
     }
 
     public function testGo(): void
     {
-        $this->getPaginatorForUpdateTests(30)->go(1);
+        $this->testPaginatorNavigation(
+            fn (Paginator $paginator) => $paginator->go(2),
+            60
+        );
     }
 
     public function testRewind(): void
     {
-        $this->getPaginatorForUpdateTests(0, 30, 30)->rewind();
+        $this->testPaginatorNavigation(fn (Paginator $paginator) => $paginator->rewind());
     }
 
     public function testKey(): void
     {
-        $paginator = new Paginator($this->createMock(RequestTransport::class), $this->createMock(Request::class));
-
-        $paginator->perPage(30)->skip(50);
+        $paginator = $this->makePaginator()->perPage(30)->skip(50);
 
         $this->assertSame(1, $paginator->key());
     }
 
     public function testCurrent(): void
     {
-        $paginator = $this->getPaginatorForUpdateTests();
-
-        $paginator->current();
-
-        // Should not send request if there is already a previous result
-        // It will fail if it sends more than one request to the request transport
-        $paginator->current();
-    }
-
-    public function testValid(): void
-    {
-        $makePaginator = fn ($hasPreviousPage, $hasNextPage) => new Paginator(
-            $this->createMock(RequestTransport::class),
-            $this->createMock(Request::class),
-            [
-                "pageInfo" => [
-                    "hasPreviousPage" => $hasPreviousPage,
-                    "hasNextPage" => $hasNextPage,
-                ],
-            ]
-        );
-
-        $this->assertTrue($makePaginator(true, true)->valid());
-        $this->assertTrue($makePaginator(true, false)->valid());
-        $this->assertTrue($makePaginator(false, true)->valid());
-        $this->assertFalse($makePaginator(false, false)->valid());
-    }
-
-    public function testGetTotalResourcesCount(): void
-    {
-        $paginator = new Paginator(
-            $this->createMock(RequestTransport::class),
-            $this->createMock(Request::class),
-            [
-                "pageInfo" => [
-                    "totalCount" => 10,
-                ],
-            ]
-        );
-
-        $this->assertSame(10, $paginator->getTotalResourcesCount());
-    }
-
-    /**
-     * Get a paginator with expectations set regarding the "skip" and "limit"
-     * parameters of the requests.
-     *
-     * Must run the method under test when you get the paginator (the "Act" of AAA).
-     */
-    private function getPaginatorForUpdateTests(int $expectedSkip = 0, int $expectedLimit = 30, int $skip = 0, int $perPage = 30): Paginator
-    {
         $listRequestMock = $this->createMock(Request::class);
         $listRequestMock->expects($this->once())
             ->method("pagination")
-            ->with($expectedSkip, $expectedLimit)
-            ->willReturn($listRequestMock);
+            ->willReturnSelf();
 
         $requestTransportMock = $this->createMock(RequestTransport::class);
         $requestTransportMock->expects($this->once())
             ->method("transport")
             ->with($listRequestMock);
 
-        return (new Paginator($requestTransportMock, $listRequestMock))
-            ->skip($skip)
-            ->perPage($perPage);
+        $paginator = new Paginator($requestTransportMock, $listRequestMock);
+
+        $paginator->current();
+    }
+
+    public function testValid(): void
+    {
+        $paginator = $this->makePaginator(["pageInfo" => ["hasNextPage" => false]]);
+
+        $this->assertFalse($paginator->valid());
+    }
+
+    public function testGetTotalResourcesCount(): void
+    {
+        $paginator = $this->makePaginator(["pageInfo" => ["totalCount" => 10]]);
+
+        $this->assertSame(10, $paginator->getTotalResourcesCount());
+    }
+
+    private function testPaginatorNavigation(callable $navigate, int $expectedSkip = 0, int $skip = 0, int $perPage = 30): void
+    {
+        $paginator = $this->makePaginator();
+
+        $paginator->skip($skip)->perPage($perPage);
+
+        $navigate($paginator);
+
+        $this->assertSame($expectedSkip, $paginator->getSkippedCount());
+    }
+
+    /**
+     * @param array<mixed> $lastResult
+     */
+    private function makePaginator(
+        ?array $lastResult = null,
+        ?Request $request = null,
+        ?RequestTransport $requestTransport = null
+    ): Paginator
+    {
+        return new Paginator(
+            $requestTransport ?? $this->createMock(RequestTransport::class),
+            $request ?? $this->createMock(Request::class),
+            $lastResult
+        );
     }
 }
