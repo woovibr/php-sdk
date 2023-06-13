@@ -2,15 +2,17 @@
 
 namespace OpenPix\PhpSdk;
 
+use Iterator;
 use OpenPix\PhpSdk\Request;
 use TypeError;
 
 /**
  * Pagination wrapper for listing requests.
  *
+ * @implements Iterator<int, array<mixed>>
  * @phpstan-type Pagination array{skip: int, limit: int, totalCount: int, hasPreviousPage: bool, hasNextPage: bool}
  */
-class Paginator
+class Paginator implements Iterator
 {
     private RequestTransport $requestTransport;
 
@@ -38,12 +40,18 @@ class Paginator
         $this->lastResult = $lastResult;
     }
 
+    /**
+     * Changes the maximum amount of resources per page.
+     */
     public function perPage(int $perPage): self
     {
         $this->perPage = $perPage;
         return $this;
     }
 
+    /**
+     * Skips an amount of resources.
+     */
     public function skip(int $skip): self
     {
         $this->skip = $skip;
@@ -51,45 +59,96 @@ class Paginator
     }
 
     /**
-     * @return array<mixed>
+     * Get current page number.
      */
-    public function next(): array
+    public function key(): int
     {
-        $this->skip += $this->perPage;
-        return $this->sendRequest();
+        return intval($this->skip / $this->perPage);
     }
 
     /**
-     * @return array<mixed>
-     */
-    public function previous(): array
-    {
-        $this->skip -= $this->perPage;
-        return $this->sendRequest();
-    }
-
-    /**
-     * @return array<mixed>
-     */
-    public function go(int $page): array
-    {
-        $this->skip = $page * $this->perPage;
-        return $this->sendRequest();
-    }
-
-    /**
-     * Send request to the list endpoint using current parameters.
+     * Get current result.
      *
      * @return array<mixed>
      */
-    public function sendRequest(): array
+    public function current(): array
+    {
+        if (is_null($this->lastResult)) return $this->update();
+
+        return $this->lastResult;
+    }
+
+    /**
+     * Go to first page and update the current result.
+     */
+    public function rewind(): void
+    {
+        $this->skip = 0;
+        $this->update();
+    }
+
+    /**
+     * Go to next page and update the current result.
+     */
+    public function next(): void
+    {
+        $this->skip += $this->perPage;
+        $this->update();
+    }
+
+    /**
+     * Go to previous page and update the current result.
+     */
+    public function previous(): void
+    {
+        $this->skip -= $this->perPage;
+        $this->update();
+    }
+
+    /**
+     * Changes the current page and update the current result.
+     */
+    public function go(int $page): void
+    {
+        $this->skip = $page * $this->perPage;
+        $this->update();
+    }
+
+    /**
+     * Returns true if it is possible to change to another page besides the current one.
+     */
+    public function valid(): bool
+    {
+        $pagination = $this->getPagination();
+
+        return $pagination["hasPreviousPage"] || $pagination["hasNextPage"];
+    }
+
+    /**
+     * Update current pagination result.
+     *
+     * @return array<mixed>
+     */
+    public function update(): array
     {
         return $this->lastResult = $this->requestTransport->transport($this->getPagedRequest());
     }
 
+    /**
+     * Applies the pagination parameters to the listing request and returns it.
+     */
     public function getPagedRequest(): Request
     {
         return $this->listRequest->pagination($this->skip, $this->perPage);
+    }
+
+    /**
+     * Gets the total amount of resources (eg customers, webhooks, charges, etc.)
+     * on this endpoint.
+     */
+    public function getTotalResourcesCount(): int
+    {
+        return $this->getPagination()["totalCount"];
     }
 
     /**
@@ -97,28 +156,13 @@ class Paginator
      */
     private function getPagination(): array
     {
-        $lastResult = $this->lastResult ?? $this->sendRequest();
+        $lastResult = $this->lastResult ?? $this->update();
 
         if (empty($lastResult["pageInfo"])) {
-            throw new TypeError("The request to the endpoint does not support paging.");
+            throw new TypeError("Endpoint does not support pagination.");
         }
 
         /** @var array{pageInfo: Pagination} $lastResult */
         return $lastResult["pageInfo"];
-    }
-
-    public function getTotalCount(): int
-    {
-        return (int) $this->getPagination()["totalCount"];
-    }
-
-    public function hasPreviousPage(): bool
-    {
-        return (bool) $this->getPagination()["hasPreviousPage"];
-    }
-
-    public function hasNextPage(): bool
-    {
-        return (bool) $this->getPagination()["hasNextPage"];
     }
 }
