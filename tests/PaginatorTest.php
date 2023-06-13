@@ -11,80 +11,108 @@ final class PaginatorTest extends TestCase
 {
     public function testGetPagedRequest(): void
     {
-        $requestTransportMock = $this->createMock(RequestTransport::class);
         $listRequestMock = $this->createMock(Request::class);
-
         $listRequestMock->expects($this->once())
             ->method("pagination")
             ->with(20, 30);
 
-        $paginator = new Paginator($requestTransportMock, $listRequestMock);
+        $paginator = $this->makePaginator(null, $listRequestMock);
 
-        $paginator->perPage(30)
-            ->skip(20)
-            ->getPagedRequest();
-    }
-
-    public function testSendRequest(): void
-    {
-        $requestTransportMock = $this->createMock(RequestTransport::class);
-        $listRequestStub = $this->createStub(Request::class);
-
-        $paginator = new Paginator($requestTransportMock, $listRequestStub);
-
-        $requestTransportMock->expects($this->once())
-            ->method("transport")
-            ->with($paginator->getPagedRequest());
-
-        $paginator->sendRequest();
+        $paginator->perPage(30)->skip(20)->getPagedRequest();
     }
 
     public function testNext(): void
     {
-        $this->getPaginatorForNavigationTests(170, 50)
-            ->perPage(50)
-            ->skip(120)
-            ->next();
+        $this->testPaginatorNavigation(
+            fn (Paginator $paginator) => $paginator->next(),
+            30
+        );
     }
 
     public function testPrevious(): void
     {
-        $this->getPaginatorForNavigationTests(120, 50)
-            ->perPage(50)
-            ->skip(170)
-            ->previous();
+        $this->testPaginatorNavigation(
+            fn (Paginator $paginator) => $paginator->previous(),
+            0,
+            30
+        );
     }
 
     public function testGo(): void
     {
-        $this->getPaginatorForNavigationTests()
-            ->perPage(50)
-            ->skip(0)
-            ->go(1);
+        $this->testPaginatorNavigation(
+            fn (Paginator $paginator) => $paginator->go(2),
+            60
+        );
     }
 
-    /**
-     * Get a paginator with expectations set regarding the "skip" and "limit"
-     * parameters of the requests.
-     *
-     * Must run the method under test when you get the paginator (the "Act" of AAA).
-     */
-    private function getPaginatorForNavigationTests(int $expectedSkip = 50, int $expectedLimit = 50): Paginator
+    public function testRewind(): void
     {
-        $requestTransportMock = $this->createMock(RequestTransport::class);
-        $listRequestMock = $this->createMock(Request::class);
+        $this->testPaginatorNavigation(fn (Paginator $paginator) => $paginator->rewind());
+    }
 
+    public function testKey(): void
+    {
+        $paginator = $this->makePaginator()->perPage(30)->skip(50);
+
+        $this->assertSame(1, $paginator->key());
+    }
+
+    public function testCurrent(): void
+    {
+        $listRequestMock = $this->createMock(Request::class);
+        $listRequestMock->expects($this->once())
+            ->method("pagination")
+            ->willReturnSelf();
+
+        $requestTransportMock = $this->createMock(RequestTransport::class);
         $requestTransportMock->expects($this->once())
             ->method("transport")
             ->with($listRequestMock);
 
-        $listRequestMock->expects($this->once())
-            ->method("pagination")
-            ->with($expectedSkip, $expectedLimit)
-            ->willReturn($listRequestMock);
-
         $paginator = new Paginator($requestTransportMock, $listRequestMock);
 
-        return $paginator;
+        $paginator->current();
+    }
+
+    public function testValid(): void
+    {
+        $paginator = $this->makePaginator(["pageInfo" => ["hasNextPage" => false]]);
+
+        $this->assertFalse($paginator->valid());
+    }
+
+    public function testGetTotalResourcesCount(): void
+    {
+        $paginator = $this->makePaginator(["pageInfo" => ["totalCount" => 10]]);
+
+        $this->assertSame(10, $paginator->getTotalResourcesCount());
+    }
+
+    private function testPaginatorNavigation(callable $navigate, int $expectedSkip = 0, int $skip = 0, int $perPage = 30): void
+    {
+        $paginator = $this->makePaginator();
+
+        $paginator->skip($skip)->perPage($perPage);
+
+        $navigate($paginator);
+
+        $this->assertSame($expectedSkip, $paginator->getSkippedCount());
+    }
+
+    /**
+     * @param array<mixed> $lastResult
+     */
+    private function makePaginator(
+        ?array $lastResult = null,
+        ?Request $request = null,
+        ?RequestTransport $requestTransport = null
+    ): Paginator
+    {
+        return new Paginator(
+            $requestTransport ?? $this->createMock(RequestTransport::class),
+            $request ?? $this->createMock(Request::class),
+            $lastResult
+        );
     }
 }
