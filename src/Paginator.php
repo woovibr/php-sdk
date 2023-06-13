@@ -67,71 +67,55 @@ class Paginator implements Iterator
     }
 
     /**
-     * Get current result.
+     * Retrieve current result.
      *
      * @return array<mixed>
      */
     public function current(): array
     {
-        if (is_null($this->lastResult)) return $this->update();
-
-        return $this->lastResult;
+        return $this->lastResult = $this->requestTransport->transport($this->getPagedRequest());
     }
 
     /**
-     * Go to first page and update the current result.
+     * Go to first page.
      */
     public function rewind(): void
     {
-        $this->skip = 0;
-        $this->update();
+        $this->skip(0);
     }
 
     /**
-     * Go to next page and update the current result.
+     * Go to next page.
      */
     public function next(): void
     {
-        $this->skip += $this->perPage;
-        $this->update();
+        $this->skip($this->skip + $this->perPage);
     }
 
     /**
-     * Go to previous page and update the current result.
+     * Go to previous page.
      */
     public function previous(): void
     {
-        $this->skip -= $this->perPage;
-        $this->update();
+        $this->skip($this->skip - $this->perPage);
     }
 
     /**
-     * Changes the current page and update the current result.
+     * Changes the current page.
      */
     public function go(int $page): void
     {
-        $this->skip = $page * $this->perPage;
-        $this->update();
+        $this->skip($page * $this->perPage);
     }
 
     /**
-     * Returns true if it is possible to change to another page besides the current one.
+     * Returns true if has next page.
      */
     public function valid(): bool
     {
-        $pagination = $this->getPagination();
+        if (is_null($this->lastResult)) return true;
 
-        return $pagination["hasPreviousPage"] || $pagination["hasNextPage"];
-    }
-
-    /**
-     * Update current pagination result.
-     *
-     * @return array<mixed>
-     */
-    public function update(): array
-    {
-        return $this->lastResult = $this->requestTransport->transport($this->getPagedRequest());
+        return $this->getPagination()["hasNextPage"];
     }
 
     /**
@@ -156,7 +140,7 @@ class Paginator implements Iterator
      */
     private function getPagination(): array
     {
-        $lastResult = $this->lastResult ?? $this->update();
+        $lastResult = $this->lastResult ?? $this->current();
 
         if (empty($lastResult["pageInfo"])) {
             throw new TypeError("Endpoint does not support pagination.");
