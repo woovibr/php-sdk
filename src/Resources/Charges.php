@@ -117,7 +117,7 @@ class Charges
      * @param bool $returnExisting Make the endpoint idempotent, will return
      * an existent charge if already has a one with the correlationID.
      *
-     * @return array Result from API.
+     * @return array<string, mixed> Result from API.
      */
     public function create(array $charge, bool $returnExisting = true): array
     {

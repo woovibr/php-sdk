@@ -21,7 +21,7 @@ class Refunds
     /**
      * Create a new Refunds instance.
      *
-     * @param RequestTransport Used to send HTTP requests to the Refunds API.
+     * @param RequestTransport $requestTransport Used to send HTTP requests to the Refunds API.
      */
     public function __construct(RequestTransport $requestTransport)
     {
