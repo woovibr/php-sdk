@@ -9,26 +9,64 @@ use TypeError;
 /**
  * Pagination wrapper for listing requests.
  *
+ * ## Usage
+ * ```php
+ * $paginator = $client->charges()->list();
+ *
+ * // Current page is 0
+ * $result = $paginator->current();
+ *
+ * $result["charges"][0]["type"]; // type of first charge
+ *
+ * // Navigate with paginator
+ * $paginator->next(); // move to next page
+ * $paginator->previous(); // move to previous page
+ * $paginator->go(1); // go to page 1
+ *
+ * // Get result from current page
+ * $result = $paginator->current();
+ * ```
+ *
  * @implements Iterator<int, array<mixed>>
  * @phpstan-type Pagination array{skip: int, limit: int, totalCount: int, hasPreviousPage: bool, hasNextPage: bool}
  */
 class Paginator implements Iterator
 {
+    /**
+     * Transport used by HTTP requests.
+     */
     private RequestTransport $requestTransport;
 
+    /**
+     * Last request sent to API.
+     */
     private Request $listRequest;
 
     /**
+     * Last result from API.
+     *
      * @var array<mixed>|null
      */
     private ?array $lastResult;
 
+    /**
+     * Amount of resources to be skipped.
+     */
     private int $skip = 0;
 
+    /**
+     * Amount of resources per page.
+     */
     private int $perPage = 30;
 
     /**
-     * @param array<mixed>|null $lastResult
+     * Create a new `Paginator` instance.
+     *
+     * @param RequestTransport $requestTransport Transport used by HTTP requests.
+     * @param Request $listRequest Request used to perform paging, through data such
+     * as URI, HTTP method and query parameters.
+     * @param array<string, mixed>|null $lastResult Result of the last call to the API or
+     * null if no request has been sent so far.
      */
     public function __construct(
         RequestTransport $requestTransport,
@@ -83,7 +121,8 @@ class Paginator implements Iterator
     }
 
     /**
-     * Retrieve current result.
+     * Retrieve current result by sending a HTTP request with well-formed
+     * pagination parameters to API.
      *
      * @return array<mixed>
      */
@@ -152,6 +191,8 @@ class Paginator implements Iterator
     }
 
     /**
+     * Get pagination metadata.
+     *
      * @return Pagination
      */
     private function getPagination(): array
