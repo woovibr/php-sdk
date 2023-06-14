@@ -51,7 +51,9 @@ class Charges
      *
      * @link https://developers.openpix.com.br/api#tag/charge/paths/~1api~1v1~1charge/get
      *
-     * @param array<string, mixed> $params
+     * @param array<string, mixed> $params Query parameters.
+     *
+     * @return Paginator Paginator with results wrapped.
      */
     public function list(array $params = []): Paginator
     {
@@ -154,18 +156,18 @@ class Charges
     }
 
     /**
-     * Get QR code image link by a paymentLinkId.
+     * Get QR code image link by a paymentLinkID.
      *
      * @link https://developers.openpix.com.br/api#tag/charge/paths/~1openpix~1charge~1brcode~1image~1%7B:id%7D.png?size=1024/get
      *
-     * @param string $paymentLinkId Charge link payment ID.
+     * @param string $paymentLinkID Charge link payment ID.
      * @param int $size Size for the image. This size should be between 600 and 4096.
      * If the size parameter was not passed, the default value will be 1024.
      *
      * @return string The URL of image.
      */
-    public function getQrCodeImageLink(string $paymentLinkId, int $size = 1024): string
+    public function getQrCodeImageLink(string $paymentLinkID, int $size = 1024): string
     {
-        return "https://api.woovi.com/openpix/charge/brcode/image/" . $paymentLinkId . ".png?size=" . $size;
+        return "https://api.woovi.com/openpix/charge/brcode/image/" . $paymentLinkID . ".png?size=" . $size;
     }
 }
