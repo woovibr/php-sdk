@@ -8,6 +8,8 @@ use OpenPix\PhpSdk\RequestTransport;
 
 /**
  * Operations on refunds.
+ *
+ * @link https://developers.openpix.com.br/api#tag/refund
  */
 class Refunds
 {
@@ -19,7 +21,7 @@ class Refunds
     /**
      * Create a new Refunds instance.
      *
-     * @param RequestTransport Used to send HTTP requests for Refunds API.
+     * @param RequestTransport Used to send HTTP requests to the Refunds API.
      */
     public function __construct(RequestTransport $requestTransport)
     {
@@ -44,18 +46,18 @@ class Refunds
      *          // Unique refund ID for this pix refund
      *          $refund["refundId"]; // string
      *
-     *          // and more...
+     *          // and more fields...
      *      }
      * }
      * ```
      *
      * @link https://developers.openpix.com.br/api#tag/refund/paths/~1api~1v1~1refund/get
      *
-     * @param array<string, mixed> $queryParams
+     * @param array<string, mixed> $queryParams Query parameters.
      *
-     * @return Paginator
+     * @return Paginator Paginator with results from API.
      */
-    public function list(array $params = []): Paginator
+    public function list(array $queryParams = []): Paginator
     {
         $request = (new Request())
             ->method("GET")
@@ -82,7 +84,7 @@ class Refunds
      * // Unique refund ID for this pix refund
      * $result["refund"]["refundId"]; // string
      *
-     * // and more...
+     * // and more fields...
      * ```
      *
      * @link https://developers.openpix.com.br/api#tag/refund/paths/~1api~1v1~1refund~1%7Bid%7D/get
@@ -125,7 +127,7 @@ class Refunds
      * // Unique refund ID for this pix refund
      * $result["refund"]["refundId"]; // string
      *
-     * // and more...
+     * // and more fields...
      * ```
      *
      * @link https://developers.openpix.com.br/api#tag/refund/paths/~1api~1v1~1refund/post
