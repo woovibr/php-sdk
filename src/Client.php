@@ -17,6 +17,8 @@ use OpenPix\PhpSdk\Resources\Refunds;
  */
 class Client
 {
+    public const SDK_VERSION = "1.0.0";
+
     public const BASE_URI = "https://api.openpix.com.br/api/v1";
 
     private RequestTransport $requestTransport;
@@ -24,7 +26,7 @@ class Client
     /**
      * Create a new client from an application ID and base URI (by default is OpenPix).
      *
-     * @see https://developers.openpix.com.br/docs/apis/api-getting-started
+     * @link https://developers.openpix.com.br/docs/apis/api-getting-started
      */
     public static function create(string $appId, string $baseUri = self::BASE_URI): self
     {

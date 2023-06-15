@@ -2,6 +2,7 @@
 
 namespace Tests;
 
+use OpenPix\PhpSdk\Client;
 use OpenPix\PhpSdk\RequestTransport;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Client\ClientInterface;
@@ -23,14 +24,21 @@ final class RequestTransportTest extends TestCase
             "getBody" => $streamMock,
         ]);
 
+        $expectedHeaders = [
+            "Authorization" => "appId",
+            "User-Agent" => RequestTransport::USER_AGENT,
+            "platform" => "openpix-php-sdk",
+            "version" => Client::SDK_VERSION,
+        ];
+
         $requestMock = $this->createMock(RequestInterface::class);
-        $requestMock->expects($this->exactly(2))
+        $requestMock->expects($this->exactly(count($expectedHeaders)))
             ->method("withAddedHeader")
-            ->willReturnCallback(function ($header, $value) use ($requestMock) {
-                if ($header === "Authorization") {
-                    $this->assertSame($value, "appId");
-                } elseif ($header !== "User-Agent") {
-                    $this->assertSame($header, "User-Agent");
+            ->willReturnCallback(function ($header, $value) use ($requestMock, $expectedHeaders) {
+                foreach ($expectedHeaders as $expectedHeader => $expectedValue) {
+                    if ($header === $expectedHeader) {
+                        $this->assertSame($value, $expectedValue);
+                    }
                 }
 
                 return $requestMock;
