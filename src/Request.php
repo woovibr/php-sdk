@@ -12,20 +12,36 @@ use Psr\Http\Message\StreamInterface;
  */
 class Request
 {
+    /**
+     * The path to endpoint.
+     */
     private string $path;
 
+    /**
+     * The HTTP method of endpoint.
+     */
     private string $method;
 
     /**
+     * Query parameters to set into URI on request build.
+     *
      * @var array<mixed>
      */
     private array $queryParams = [];
 
     /**
+     * Body of request.
+     *
+     * Can be an array for JSON requests, \Psr\Http\Message\StreamInterface
+     * for customization on request body or null for requests without body.
+     *
      * @var array<mixed>|\Psr\Http\Message\StreamInterface|null
      */
     private $body = null;
 
+    /**
+     * Set HTTP method.
+     */
     public function method(string $method): self
     {
         $this->method = $method;
@@ -37,6 +53,9 @@ class Request
         return $this->method;
     }
 
+    /**
+     * Set request path.
+     */
     public function path(string $path): self
     {
         $this->path = $path;
@@ -49,6 +68,8 @@ class Request
     }
 
     /**
+     * Update all query parameters with given array.
+     *
      * @param array<string, mixed> $queryParams
      */
     public function queryParams(array $queryParams): self
@@ -58,6 +79,8 @@ class Request
     }
 
     /**
+     * Return query parameters.
+     *
      * @return array<string, mixed>
      */
     public function getQueryParams(): array
@@ -66,6 +89,8 @@ class Request
     }
 
     /**
+     * Set request body.
+     *
      * @param array<mixed>|\Psr\Http\Message\StreamInterface $body
      */
     public function body($body): self
@@ -75,6 +100,8 @@ class Request
     }
 
     /**
+     * Get request body.
+     *
      * @return array<mixed>|\Psr\Http\Message\StreamInterface|null
      */
     public function getBody()
@@ -82,6 +109,9 @@ class Request
         return $this->body;
     }
 
+    /**
+     * Apply query parameters for pagination.
+     */
     public function pagination(int $skip, int $limit): self
     {
         $this->queryParams["skip"] = $skip;
@@ -89,6 +119,9 @@ class Request
         return $this;
     }
 
+    /**
+     * Return an PSR-7 HTTP request for PSR-18 HTTP clients.
+     */
     public function build(
         string $baseUri,
         RequestFactoryInterface $requestFactory,
@@ -107,6 +140,9 @@ class Request
         return $request;
     }
 
+    /**
+     * Inject body into request as PSR-7 Stream, with proper `Content-type` header.
+     */
     private function injectBody(RequestInterface $request, StreamFactoryInterface $streamFactory): RequestInterface
     {
         if (is_null($this->body)) {
@@ -124,6 +160,9 @@ class Request
     }
 
     /**
+     * Normalize query parameters. For example, it converts boolean parameters to strings,
+     * as `http_build_query` returns integers.
+     *
      * @param array<mixed> $queryParams
      * @return array<mixed>
      */

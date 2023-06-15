@@ -6,16 +6,48 @@ use OpenPix\PhpSdk\Paginator;
 use OpenPix\PhpSdk\Request;
 use OpenPix\PhpSdk\RequestTransport;
 
+/**
+ * Operations on webhooks.
+ */
 class Webhooks
 {
+    /**
+     * Request transport used to send HTTP requests.
+     */
     private RequestTransport $requestTransport;
 
+    /**
+     * Create a new Webhooks instance.
+     *
+     * @param RequestTransport $requestTransport Request transport used to send HTTP requests.
+     */
     public function __construct(RequestTransport $requestTransport)
     {
         $this->requestTransport = $requestTransport;
     }
 
     /**
+     * List registered webhooks using {@see Paginator}.
+     *
+     * ## Usage
+     * ```php
+     * $paginator = $client->webhooks()->list();
+     *
+     * foreach ($paginator as $result) {
+     *      foreach ($result["webhooks"] as $webhook) {
+     *          $webhook["name"]; // string
+     *          $webhook["event"]; // string
+     *          $webhook["url"]; // string
+     *          $webhook["isActive"]; // bool
+     *          // and more...
+     *      }
+     * }
+     * ```
+     *
+     * @link https://developers.openpix.com.br/api#tag/webhook/paths/~1api~1v1~1webhook/get
+     *
+     * @param string $filterByUrl You can use the url to filter all webhooks.
+     *
      * @return Paginator
      */
     public function list(string $filterByUrl = ""): Paginator
@@ -29,7 +61,16 @@ class Webhooks
     }
 
     /**
-     * @return array<mixed>
+     * Delete a webhook by ID.
+     *
+     * ## Usage
+     * ```php
+     * $client->webhooks()->delete($webhookID);
+     * ```
+     *
+     * @link https://developers.openpix.com.br/api#tag/webhook/paths/~1api~1v1~1webhook~1%7Bid%7D/delete
+     *
+     * @return array<string, mixed>
      */
     public function delete(string $webhookID): array
     {
@@ -41,8 +82,47 @@ class Webhooks
     }
 
     /**
-     * @param array<mixed> $webhook
-     * @return array<mixed>
+     * Create a new webhook.
+     *
+     * ## Usage
+     * ```php
+     * $result = $client->webhooks()->create([
+     *      "webhook" => [
+     *          "name" => "", // string
+     *          // Available events to register a webhook to listen to. If no one selected anyone the
+     *          // default event will be OPENPIX:TRANSACTION_RECEIVED.
+     *          // OPENPIX:CHARGE_CREATED - New charge created
+     *          // OPENPIX:CHARGE_COMPLETED - Charge completed is when a charge is fully paid
+     *          // OPENPIX:CHARGE_EXPIRED - Charge expired is when a charge is not fully paid and expired
+     *          // OPENPIX:TRANSACTION_RECEIVED - New PIX transaction received
+     *          // OPENPIX:TRANSACTION_REFUND_RECEIVED - New PIX transaction refund received or refunded
+     *          // OPENPIX:MOVEMENT_CONFIRMED - Payment confirmed is when the pix transaction related to the payment gets confirmed
+     *          // OPENPIX:MOVEMENT_FAILED - Payment failed is when the payment gets approved and a error occurs
+     *          // OPENPIX:MOVEMENT_REMOVED - Payment was removed by a user
+     *          "event" => "", // string
+     *          "url" => "", // string
+     *          "authorization" => "", // string
+     *          "isActive" => false, // bool
+     *      ]
+     * ]);
+     *
+     * $result["webhook"]["id"]; // string
+     * $result["webhook"]["name"]; // string
+     * // Available events to register a webhook to listen to.
+     * // If no one selected anyone the default event will be "OPENPIX:TRANSACTION_RECEIVED".
+     * $result["webhook"]["event"]; // string
+     * $result["webhook"]["url"]; // string
+     * $result["webhook"]["authorization"]; // string
+     * $result["webhook"]["isActive"]; // bool
+     * $result["webhook"]["createdAt"]; // string
+     * $result["webhook"]["updatedAt"]; // string
+     * ```
+     *
+     * @link https://developers.openpix.com.br/api#tag/webhook/paths/~1api~1v1~1webhook/post
+     *
+     * @param array<string, mixed> $webhook
+     *
+     * @return array<string, mixed>
      */
     public function create(array $webhook): array
     {
