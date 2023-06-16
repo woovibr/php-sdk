@@ -17,18 +17,48 @@ use Psr\Http\Message\StreamFactoryInterface;
  */
 class RequestTransport
 {
+    /**
+     * User Agent.
+     */
     public const USER_AGENT = "openpix-php-sdk";
 
+    /**
+     * Underlying HTTP client.
+     */
     private ClientInterface $httpClient;
 
+    /**
+     * Request factory passed to API `Request` builder.
+     */
     private RequestFactoryInterface $requestFactory;
 
+    /**
+     * Stream factory passed to API `Request` builder.
+     */
     private StreamFactoryInterface $streamFactory;
 
+    /**
+     * Application ID.
+     */
     private string $appId;
 
+    /**
+     * Base URI of all requests handled by RequestTransport.
+     */
     private string $baseUri;
 
+    /**
+     * Create a new RequestTransport instance.
+     *
+     * @link https://developers.openpix.com.br/docs/apis/api-getting-started
+     *
+     * @param string $appId Application ID.
+     * @param string $baseUri Base URI of all requests handled by RequestTransport.
+     * @param ?ClientInterface $httpClient PSR-18 HTTP Client. Is automatically
+     * discovered with HTTPlug.
+     * @param ?RequestFactoryInterface $requestFactory PSR-17 RequestFactory. It is automatically discovered with HTTPlug.
+     * @param ?StreamFactoryInterface $streamFactory PSR-17 StreamFactory. It is automatically discovered with HTTPlug.
+     */
     public function __construct(
         string $appId,
         string $baseUri,
@@ -48,7 +78,7 @@ class RequestTransport
      *
      * @param Request|RequestInterface $request
      *
-     * @return array<mixed> Decoded response data
+     * @return array<string, mixed> Decoded response data.
      */
     public function transport($request): array
     {
@@ -63,14 +93,21 @@ class RequestTransport
         return $this->hydrateResponse($response);
     }
 
+    /**
+     * Add default headers like Authorization and `platform`.
+     */
     private function withRequestDefaultParameters(RequestInterface $request): RequestInterface
     {
         return $request->withAddedHeader("User-Agent", self::USER_AGENT)
-            ->withAddedHeader("Authorization", $this->appId);
+            ->withAddedHeader("Authorization", $this->appId)
+            ->withAddedHeader("version", Client::SDK_VERSION)
+            ->withAddedHeader("platform", "openpix-php-sdk");
     }
 
     /**
-     * @return array<mixed>
+     * Decode response data.
+     *
+     * @return array<string, mixed>
      */
     private function hydrateResponse(ResponseInterface $response): array
     {
