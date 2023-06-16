@@ -18,6 +18,8 @@ class Charges
 
     /**
      * Create a new Charges instance.
+     *
+     * @param RequestTransport $requestTransport Used to send HTTP requests.
      */
     public function __construct(RequestTransport $requestTransport)
     {
@@ -168,6 +170,6 @@ class Charges
      */
     public function getQrCodeImageLink(string $paymentLinkID, int $size = 1024): string
     {
-        return "https://api.woovi.com/openpix/charge/brcode/image/" . $paymentLinkID . ".png?size=" . $size;
+        return $this->requestTransport->getBaseUri() . "/openpix/charge/brcode/image/" . $paymentLinkID . ".png?size=" . $size;
     }
 }
