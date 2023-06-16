@@ -94,6 +94,14 @@ class RequestTransport
     }
 
     /**
+     * Get base URI of API.
+     */
+    public function getBaseUri(): string
+    {
+        return $this->baseUri;
+    }
+
+    /**
      * Add default headers like Authorization and `platform`.
      */
     private function withRequestDefaultParameters(RequestInterface $request): RequestInterface

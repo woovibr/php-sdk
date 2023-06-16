@@ -92,10 +92,12 @@ final class ChargesTest extends TestCase
 
     public function testGetQrCodeImageLink(): void
     {
-        $charges = new Charges($this->createMock(RequestTransport::class));
+        $charges = new Charges($this->createConfiguredMock(RequestTransport::class, [
+            "getBaseUri" => "https://example.com",
+        ]));
 
         $result = $charges->getQrCodeImageLink("123456", 256);
 
-        $this->assertSame("https://api.woovi.com/openpix/charge/brcode/image/123456.png?size=256", $result);
+        $this->assertSame("https://example.com/openpix/charge/brcode/image/123456.png?size=256", $result);
     }
 }
