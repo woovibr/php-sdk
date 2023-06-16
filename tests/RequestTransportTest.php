@@ -2,6 +2,7 @@
 
 namespace Tests;
 
+use OpenPix\PhpSdk\ApiErrorException;
 use OpenPix\PhpSdk\Client;
 use OpenPix\PhpSdk\RequestTransport;
 use PHPUnit\Framework\TestCase;
@@ -59,5 +60,58 @@ final class RequestTransportTest extends TestCase
         );
 
         $this->assertSame($requestTransport->transport($requestMock), $expectedResult);
+    }
+
+    public function testShouldHandleApiReturnedErrorString(): void
+    {
+        $message = "Nome é obrigatório.";
+
+        $this->expectException(ApiErrorException::class);
+        $this->expectExceptionMessage($message);
+        $this->testApiErrorHandlingFor($message);
+    }
+
+    public function testShouldHandleApiReturnedErrorArray(): void
+    {
+        $message = "Cobrança não encontrada.";
+
+        $this->expectException(ApiErrorException::class);
+        $this->expectExceptionMessage($message);
+        $this->testApiErrorHandlingFor(["message" => $message]);
+    }
+
+    /**
+     * @param string|array{message: string} $error
+     */
+    private function testApiErrorHandlingFor($error): void
+    {
+        $requestMock = $this->createMock(RequestInterface::class);
+        $requestMock
+            ->method("withAddedHeader")
+            ->willReturn($requestMock);
+
+        $responseMock = $this->createConfiguredMock(ResponseInterface::class, [
+            "getBody" => $this->createConfiguredMock(StreamInterface::class, [
+                "getContents" => json_encode(["error" => $error]),
+            ]),
+            "getStatusCode" => 400,
+            "getReasonPhrase" => "Bad request",
+        ]);
+
+        $httpClientMock = $this->createMock(ClientInterface::class);
+        $httpClientMock->expects($this->once())
+            ->method("sendRequest")
+            ->with($requestMock)
+            ->willReturn($responseMock);
+
+        $requestTransport = new RequestTransport(
+            "appId",
+            "https://example.com",
+            $httpClientMock,
+            $this->createMock(RequestFactoryInterface::class),
+            $this->createMock(StreamFactoryInterface::class),
+        );
+
+        $requestTransport->transport($requestMock);
     }
 }

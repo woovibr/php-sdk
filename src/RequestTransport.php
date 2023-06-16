@@ -118,7 +118,13 @@ class RequestTransport
         }
 
         if (!empty($contents["error"])) {
-            throw new ApiErrorException($contents["error"]);
+            $error = $contents["error"];
+
+            if (is_array($error)) {
+                $error = $error["message"];
+            }
+
+            throw new ApiErrorException($error);
         }
 
         return $contents;
