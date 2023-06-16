@@ -19,7 +19,7 @@ class Client
 {
     public const SDK_VERSION = "1.0.0";
 
-    public const BASE_URI = "https://api.openpix.com.br/api/v1";
+    public const BASE_URI = "https://api.openpix.com.br";
 
     private RequestTransport $requestTransport;
 
