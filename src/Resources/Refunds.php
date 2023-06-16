@@ -61,7 +61,7 @@ class Refunds
     {
         $request = (new Request())
             ->method("GET")
-            ->path("/refund")
+            ->path("/api/v1/refund")
             ->queryParams($queryParams);
 
         return new Paginator($this->requestTransport, $request);
@@ -97,7 +97,7 @@ class Refunds
     {
         $request = (new Request())
             ->method("GET")
-            ->path("/refund/" . $refundID);
+            ->path("/api/v1/refund/" . $refundID);
 
         return $this->requestTransport->transport($request);
     }
@@ -140,7 +140,7 @@ class Refunds
     {
         $request = (new Request())
             ->method("POST")
-            ->path("/refund")
+            ->path("/api/v1/refund")
             ->body($refund);
 
         return $this->requestTransport->transport($request);

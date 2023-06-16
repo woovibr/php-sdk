@@ -16,7 +16,7 @@ final class SubscriptionsTest extends TestCase
             ->method("transport")
             ->willReturnCallback(function (Request $request) {
                 $this->assertSame("GET", $request->getMethod());
-                $this->assertSame("/subscriptions/abcd", $request->getPath());
+                $this->assertSame("/api/v1/subscriptions/abcd", $request->getPath());
                 $this->assertSame($request->getBody(), null);
                 $this->assertSame($request->getQueryParams(), []);
 
@@ -40,7 +40,7 @@ final class SubscriptionsTest extends TestCase
             ->method("transport")
             ->willReturnCallback(function (Request $request) use ($requestBody) {
                 $this->assertSame("POST", $request->getMethod());
-                $this->assertSame("/subscriptions", $request->getPath());
+                $this->assertSame("/api/v1/subscriptions", $request->getPath());
                 $this->assertSame($request->getBody(), $requestBody);
                 $this->assertSame($request->getQueryParams(), []);
 

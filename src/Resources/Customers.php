@@ -53,7 +53,7 @@ class Customers
     {
         $request = (new Request())
             ->method("GET")
-            ->path("/customer");
+            ->path("/api/v1/customer");
 
         return new Paginator($this->requestTransport, $request);
     }
@@ -79,7 +79,7 @@ class Customers
     {
         $request = (new Request())
             ->method("GET")
-            ->path("/customer/" . $correlationID);
+            ->path("/api/v1/customer/" . $correlationID);
 
         return $this->requestTransport->transport($request);
     }
@@ -111,7 +111,7 @@ class Customers
     {
         $request = (new Request())
             ->method("POST")
-            ->path("/customer")
+            ->path("/api/v1/customer")
             ->body($data);
 
         return $this->requestTransport->transport($request);

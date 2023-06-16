@@ -83,7 +83,7 @@ class RequestTransport
     public function transport($request): array
     {
         if (! ($request instanceof RequestInterface)) {
-            $request = $request->build($this->baseUri . "/api/v1", $this->requestFactory, $this->streamFactory);
+            $request = $request->build($this->baseUri, $this->requestFactory, $this->streamFactory);
         }
 
         $request = $this->withRequestDefaultParameters($request);

@@ -18,7 +18,7 @@ final class ChargesTest extends TestCase
             ->method("transport")
             ->willReturnCallback(function (Request $request) use ($charge) {
                 $this->assertSame("GET", $request->getMethod());
-                $this->assertSame("/charge/abcd", $request->getPath());
+                $this->assertSame("/api/v1/charge/abcd", $request->getPath());
                 $this->assertSame($request->getBody(), null);
                 $this->assertSame($request->getQueryParams(), []);
 
@@ -43,7 +43,7 @@ final class ChargesTest extends TestCase
             ->method("transport")
             ->willReturnCallback(function (Request $request) use ($requestBody) {
                 $this->assertSame("POST", $request->getMethod());
-                $this->assertSame("/charge", $request->getPath());
+                $this->assertSame("/api/v1/charge", $request->getPath());
                 $this->assertSame($request->getBody(), $requestBody);
                 $this->assertSame($request->getQueryParams(), [
                     "return_existing" => true,
@@ -65,7 +65,7 @@ final class ChargesTest extends TestCase
         $charges = new Charges($requestTransportMock);
         $pagedRequest = $charges->list()->getPagedRequest();
 
-        $this->assertSame($pagedRequest->getPath(), "/charge");
+        $this->assertSame($pagedRequest->getPath(), "/api/v1/charge");
         $this->assertSame($pagedRequest->getMethod(), "GET");
         $this->assertSame($pagedRequest->getBody(), null);
     }
@@ -77,7 +77,7 @@ final class ChargesTest extends TestCase
             ->method("transport")
             ->willReturnCallback(function (Request $request) {
                 $this->assertSame("DELETE", $request->getMethod());
-                $this->assertSame("/charge/abcd", $request->getPath());
+                $this->assertSame("/api/v1/charge/abcd", $request->getPath());
                 $this->assertSame($request->getBody(), null);
                 $this->assertSame($request->getQueryParams(), []);
 

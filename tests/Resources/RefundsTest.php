@@ -16,7 +16,7 @@ final class RefundsTest extends TestCase
         $refunds = new Refunds($requestTransportMock);
         $pagedRequest = $refunds->list()->getPagedRequest();
 
-        $this->assertSame($pagedRequest->getPath(), "/refund");
+        $this->assertSame($pagedRequest->getPath(), "/api/v1/refund");
         $this->assertSame($pagedRequest->getMethod(), "GET");
         $this->assertSame($pagedRequest->getBody(), null);
     }
@@ -28,7 +28,7 @@ final class RefundsTest extends TestCase
             ->method("transport")
             ->willReturnCallback(function (Request $request) {
                 $this->assertSame("GET", $request->getMethod());
-                $this->assertSame("/refund/abcd", $request->getPath());
+                $this->assertSame("/api/v1/refund/abcd", $request->getPath());
                 $this->assertSame($request->getBody(), null);
                 $this->assertSame($request->getQueryParams(), []);
 
@@ -52,7 +52,7 @@ final class RefundsTest extends TestCase
             ->method("transport")
             ->willReturnCallback(function (Request $request) use ($requestBody) {
                 $this->assertSame("POST", $request->getMethod());
-                $this->assertSame("/refund", $request->getPath());
+                $this->assertSame("/api/v1/refund", $request->getPath());
                 $this->assertSame($request->getBody(), $requestBody);
                 $this->assertSame($request->getQueryParams(), []);
 

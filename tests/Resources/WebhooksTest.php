@@ -19,7 +19,7 @@ final class WebhooksTest extends TestCase
             ->skip(42)
             ->getPagedRequest();
 
-        $this->assertSame($pagedRequest->getPath(), "/webhook");
+        $this->assertSame($pagedRequest->getPath(), "/api/v1/webhook");
         $this->assertSame($pagedRequest->getMethod(), "GET");
         $this->assertSame($pagedRequest->getBody(), null);
         $this->assertSame($pagedRequest->getQueryParams(), [
@@ -36,7 +36,7 @@ final class WebhooksTest extends TestCase
             ->method("transport")
             ->willReturnCallback(function (Request $request) {
                 $this->assertSame("DELETE", $request->getMethod());
-                $this->assertSame("/webhook/abcd", $request->getPath());
+                $this->assertSame("/api/v1/webhook/abcd", $request->getPath());
                 $this->assertSame($request->getBody(), null);
                 $this->assertSame($request->getQueryParams(), []);
 
@@ -60,7 +60,7 @@ final class WebhooksTest extends TestCase
             ->method("transport")
             ->willReturnCallback(function (Request $request) use ($requestBody) {
                 $this->assertSame("POST", $request->getMethod());
-                $this->assertSame("/webhook", $request->getPath());
+                $this->assertSame("/api/v1/webhook", $request->getPath());
                 $this->assertSame($request->getBody(), $requestBody);
                 $this->assertSame($request->getQueryParams(), []);
 
