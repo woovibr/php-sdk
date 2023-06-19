@@ -13,7 +13,7 @@ use Psr\Http\Message\StreamFactoryInterface;
 
 /**
  * Transports HTTP requests to the API, adding data such as the Authorization and
- * User-Agent header, handling errors and decoding responses.
+ * User-Agent header, API path (like /api/v1) and handling errors and decoding responses.
  */
 class RequestTransport
 {

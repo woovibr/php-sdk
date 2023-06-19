@@ -17,7 +17,7 @@ final class CustomersTest extends TestCase
 
         $pagedRequest = $customers->list()->getPagedRequest();
 
-        $this->assertSame($pagedRequest->getPath(), "/customer");
+        $this->assertSame($pagedRequest->getPath(), "/api/v1/customer");
         $this->assertSame($pagedRequest->getMethod(), "GET");
         $this->assertSame($pagedRequest->getBody(), null);
     }
@@ -36,7 +36,7 @@ final class CustomersTest extends TestCase
             ->method("transport")
             ->willReturnCallback(function (Request $request) use ($correlationID, $customer) {
                 $this->assertSame("GET", $request->getMethod());
-                $this->assertSame("/customer/" . $correlationID, $request->getPath());
+                $this->assertSame("/api/v1/customer/" . $correlationID, $request->getPath());
                 $this->assertSame($request->getBody(), null);
                 $this->assertSame($request->getQueryParams(), []);
 
@@ -63,7 +63,7 @@ final class CustomersTest extends TestCase
             ->method("transport")
             ->willReturnCallback(function (Request $request) use ($customer) {
                 $this->assertSame("POST", $request->getMethod());
-                $this->assertSame("/customer", $request->getPath());
+                $this->assertSame("/api/v1/customer", $request->getPath());
                 $this->assertSame($request->getBody(), $customer);
                 $this->assertSame($request->getQueryParams(), []);
 

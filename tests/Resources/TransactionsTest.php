@@ -18,7 +18,7 @@ final class TransactionsTest extends TestCase
             ->method("transport")
             ->willReturnCallback(function (Request $request) {
                 $this->assertSame("GET", $request->getMethod());
-                $this->assertSame("/transaction/transactionId", $request->getPath());
+                $this->assertSame("/api/v1/transaction/transactionId", $request->getPath());
                 $this->assertSame($request->getBody(), null);
                 $this->assertSame($request->getQueryParams(), []);
 
@@ -49,7 +49,7 @@ final class TransactionsTest extends TestCase
         $transactions = new Transactions($requestTransportMock);
         $pagedRequest = $transactions->list($params)->perPage(50)->skip(10)->getPagedRequest();
 
-        $this->assertSame($pagedRequest->getPath(), "/transaction");
+        $this->assertSame($pagedRequest->getPath(), "/api/v1/transaction");
         $this->assertSame($pagedRequest->getMethod(), "GET");
         $this->assertSame($pagedRequest->getBody(), null);
         $this->assertSame($pagedRequest->getQueryParams(), $params);

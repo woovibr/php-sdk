@@ -55,7 +55,7 @@ class Transactions
     {
         $request = (new Request())
             ->method("GET")
-            ->path("/transaction/" . $transactionID);
+            ->path("/api/v1/transaction/" . $transactionID);
 
         return $this->requestTransport->transport($request);
     }
@@ -100,7 +100,7 @@ class Transactions
     {
         $request = (new Request())
             ->method("GET")
-            ->path("/transaction")
+            ->path("/api/v1/transaction")
             ->queryParams($queryParams);
 
         return new Paginator($this->requestTransport, $request);

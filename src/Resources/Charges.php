@@ -61,7 +61,7 @@ class Charges
     {
         $request = (new Request())
             ->method("GET")
-            ->path("/charge")
+            ->path("/api/v1/charge")
             ->queryParams($params);
 
         return new Paginator($this->requestTransport, $request);
@@ -92,7 +92,7 @@ class Charges
     {
         $request = (new Request())
             ->method("GET")
-            ->path("/charge/" . $id);
+            ->path("/api/v1/charge/" . $id);
 
         return $this->requestTransport->transport($request);
     }
@@ -125,7 +125,7 @@ class Charges
     {
         $request = (new Request())
             ->method("POST")
-            ->path("/charge")
+            ->path("/api/v1/charge")
             ->body($charge)
             ->queryParams(["return_existing" => $returnExisting]);
 
@@ -152,7 +152,7 @@ class Charges
     {
         $request = (new Request())
             ->method("DELETE")
-            ->path("/charge/" . $id);
+            ->path("/api/v1/charge/" . $id);
 
         return $this->requestTransport->transport($request);
     }

@@ -54,7 +54,7 @@ class Webhooks
     {
         $request = (new Request())
             ->method("GET")
-            ->path("/webhook")
+            ->path("/api/v1/webhook")
             ->queryParams(["url" => $filterByUrl]);
 
         return new Paginator($this->requestTransport, $request);
@@ -76,7 +76,7 @@ class Webhooks
     {
         $request = (new Request())
             ->method("DELETE")
-            ->path("/webhook/" . $webhookID);
+            ->path("/api/v1/webhook/" . $webhookID);
 
         return $this->requestTransport->transport($request);
     }
@@ -128,7 +128,7 @@ class Webhooks
     {
         $request = (new Request())
             ->method("POST")
-            ->path("/webhook")
+            ->path("/api/v1/webhook")
             ->body($webhook);
 
         return $this->requestTransport->transport($request);

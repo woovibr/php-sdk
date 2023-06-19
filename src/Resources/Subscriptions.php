@@ -58,7 +58,7 @@ class Subscriptions
     {
         $request = (new Request())
             ->method("GET")
-            ->path("/subscriptions/" . $subscriptionID);
+            ->path("/api/v1/subscriptions/" . $subscriptionID);
 
         return $this->requestTransport->transport($request);
     }
@@ -105,7 +105,7 @@ class Subscriptions
     {
         $request = (new Request())
             ->method("POST")
-            ->path("/subscriptions")
+            ->path("/api/v1/subscriptions")
             ->body($subscription);
 
         return $this->requestTransport->transport($request);

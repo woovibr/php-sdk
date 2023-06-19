@@ -60,7 +60,7 @@ class Payments
     {
         $request = (new Request())
             ->method("GET")
-            ->path("/payment")
+            ->path("/api/v1/payment")
             ->queryParams($queryParams);
 
         return new Paginator($this->requestTransport, $request);
@@ -98,7 +98,7 @@ class Payments
     {
         $request = (new Request())
             ->method("GET")
-            ->path("/payment/" . $paymentID);
+            ->path("/api/v1/payment/" . $paymentID);
 
         return $this->requestTransport->transport($request);
     }
@@ -150,7 +150,7 @@ class Payments
     {
         $request = (new Request())
             ->method("POST")
-            ->path("/payment")
+            ->path("/api/v1/payment")
             ->body($payment);
 
         return $this->requestTransport->transport($request);

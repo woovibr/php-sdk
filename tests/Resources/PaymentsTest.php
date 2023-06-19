@@ -16,7 +16,7 @@ final class PaymentsTest extends TestCase
         $payments = new Payments($requestTransportMock);
         $pagedRequest = $payments->list()->getPagedRequest();
 
-        $this->assertSame($pagedRequest->getPath(), "/payment");
+        $this->assertSame($pagedRequest->getPath(), "/api/v1/payment");
         $this->assertSame($pagedRequest->getMethod(), "GET");
         $this->assertSame($pagedRequest->getBody(), null);
     }
@@ -28,7 +28,7 @@ final class PaymentsTest extends TestCase
             ->method("transport")
             ->willReturnCallback(function (Request $request) {
                 $this->assertSame("GET", $request->getMethod());
-                $this->assertSame("/payment/abcd", $request->getPath());
+                $this->assertSame("/api/v1/payment/abcd", $request->getPath());
                 $this->assertSame($request->getBody(), null);
                 $this->assertSame($request->getQueryParams(), []);
 
@@ -52,7 +52,7 @@ final class PaymentsTest extends TestCase
             ->method("transport")
             ->willReturnCallback(function (Request $request) use ($requestBody) {
                 $this->assertSame("POST", $request->getMethod());
-                $this->assertSame("/payment", $request->getPath());
+                $this->assertSame("/api/v1/payment", $request->getPath());
                 $this->assertSame($request->getBody(), $requestBody);
                 $this->assertSame($request->getQueryParams(), []);
 
