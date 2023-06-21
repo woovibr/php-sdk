@@ -1,4 +1,13 @@
 # OpenPix PHP SDK
+<p>
+    <a href="https://packagist.org/packages/open-pix/php-sdk">
+        <image src="https://img.shields.io/packagist/php-v/open-pix/php-sdk?color=%2325c2a0">
+    </a>
+    <a href="https://packagist.org/packages/open-pix/php-sdk">
+        <image src="https://img.shields.io/packagist/dt/open-pix/php-sdk?color=%2325c2a0">
+    </a>
+</p>
+
 Welcome to the OpenPix PHP SDK! This SDK provides convenient access to the OpenPix REST API, allowing you to easily integrate payment services into your PHP applications.
 
 <p align="center">
