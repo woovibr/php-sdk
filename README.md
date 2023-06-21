@@ -1,10 +1,10 @@
 # OpenPix PHP SDK
 <p>
     <a href="https://packagist.org/packages/open-pix/php-sdk">
-        <image src="https://img.shields.io/packagist/php-v/open-pix/php-sdk?color=%2325c2a0">
+        <image src="https://img.shields.io/packagist/php-v/open-pix/php-sdk?color=%2325c2a0&logo=php&label=open-pix/php-sdk">
     </a>
     <a href="https://packagist.org/packages/open-pix/php-sdk">
-        <image src="https://img.shields.io/packagist/dt/open-pix/php-sdk?color=%2325c2a0">
+        <image src="https://img.shields.io/packagist/dt/open-pix/php-sdk?color=%2325c2a0&logo=php">
     </a>
 </p>
 
