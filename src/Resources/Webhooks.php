@@ -169,6 +169,6 @@ class Webhooks
             base64_decode($signature),
             base64_decode(self::VALIDATION_PUBLIC_KEY_BASE64),
             "sha256WithRSAEncryption"
-        );
+        ) === 1;
     }
 }
