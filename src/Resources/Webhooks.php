@@ -12,6 +12,11 @@ use OpenPix\PhpSdk\RequestTransport;
 class Webhooks
 {
     /**
+     * Used for webhook signature validation.
+     */
+    private const VALIDATION_PUBLIC_KEY_BASE64 = "LS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS0KTUlHZk1BMEdDU3FHU0liM0RRRUJBUVVBQTRHTkFEQ0JpUUtCZ1FDLytOdElranpldnZxRCtJM01NdjNiTFhEdApwdnhCalk0QnNSclNkY2EzcnRBd01jUllZdnhTbmQ3amFnVkxwY3RNaU94UU84aWVVQ0tMU1dIcHNNQWpPL3paCldNS2Jxb0c4TU5waS91M2ZwNnp6MG1jSENPU3FZc1BVVUcxOWJ1VzhiaXM1WloySVpnQk9iV1NwVHZKMGNuajYKSEtCQUE4MkpsbitsR3dTMU13SURBUUFCCi0tLS0tRU5EIFBVQkxJQyBLRVktLS0tLQo=";
+
+    /**
      * Request transport used to send HTTP requests.
      */
     private RequestTransport $requestTransport;
@@ -132,5 +137,38 @@ class Webhooks
             ->body($webhook);
 
         return $this->requestTransport->transport($request);
+    }
+
+    /**
+     * Validate webhook signature.
+     *
+     * Every Webhook request has the header `x-webhook-signature` which is the signature
+     * generated with Woovi's secret key and the Webhook payload. Upon receiving the
+     * header, you can validate whether the signature is valid using this method and
+     * continue the Webhook flow.
+     *
+     * ## Usage
+     * ```php
+     * $payload = file_get_contents("php://input");
+     * $signature = getallheaders()["x-webhook-signature"];
+     *
+     * $client->webhooks()->isWebhookValid($payload, $signature);
+     * ```
+     *
+     * @link https://developers.openpix.com.br/docs/webhook/webhook-signature-validation
+     *
+     * @param string $payload Webhook payload string encoded in JSON. You can get this using `file_get_contents("php://input")`, for example.
+     * @param string $signature `x-webhook-signature` HTTP header sent by OpenPix request. You can get this using the `getallheaders` function, for example.
+     *
+     * @return bool Returns `true` if the received webhook is valid and `false` otherwise.
+     */
+    public function isWebhookValid(string $payload, string $signature): bool
+    {
+        return openssl_verify(
+            $payload,
+            base64_decode($signature),
+            base64_decode(self::VALIDATION_PUBLIC_KEY_BASE64),
+            "sha256WithRSAEncryption"
+        ) === 1;
     }
 }
