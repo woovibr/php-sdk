@@ -6,5 +6,6 @@ README.md         export-ignore
 phpstan.neon.dist export-ignore
 phpunit.xml.dist  export-ignore
 *.png             export-ignore
+.github           export-ignore
 
 *.php diff=php
