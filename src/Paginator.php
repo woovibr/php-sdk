@@ -168,7 +168,9 @@ class Paginator implements Iterator
      */
     public function valid(): bool
     {
-        if (is_null($this->lastResult)) return true;
+        if (is_null($this->lastResult)) {
+            return true;
+        }
 
         return $this->getPagination()["hasNextPage"];
     }
