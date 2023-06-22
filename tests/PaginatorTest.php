@@ -107,8 +107,7 @@ final class PaginatorTest extends TestCase
         ?array $lastResult = null,
         ?Request $request = null,
         ?RequestTransport $requestTransport = null
-    ): Paginator
-    {
+    ): Paginator {
         return new Paginator(
             $requestTransport ?? $this->createMock(RequestTransport::class),
             $request ?? $this->createMock(Request::class),
