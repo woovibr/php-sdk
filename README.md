@@ -34,7 +34,7 @@ $client = Client::create("YOUR_APP_ID");
 // Create a customer.
 $customer = [
     "name" => "Dan PHP-SDK",
-    "taxID" => "",
+    "taxID" => "00000000000", // CPF
     "email" => "email0@example.com",
     "phone" => "5511999999999",
     "correlationID" => "test-php-sdk-customer-" . mt_rand(1, 10000),
