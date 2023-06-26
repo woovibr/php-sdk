@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.1](https://github.com/Open-Pix/php-sdk/compare/v1.1.0...v1.1.1) (2023-06-26)
+
+
+### Miscellaneous Chores
+
+* **actions:** add spelling CI job ([#41](https://github.com/Open-Pix/php-sdk/issues/41)) ([e661bb2](https://github.com/Open-Pix/php-sdk/commit/e661bb2afc2213a73637316477284720c2e1af49))
+
 ## [1.1.0](https://github.com/Open-Pix/php-sdk/compare/v1.0.0...v1.1.0) (2023-06-23)
 
 
