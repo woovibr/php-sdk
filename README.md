@@ -1,30 +1,24 @@
 # OpenPix PHP SDK
-<p>
-    <a href="https://packagist.org/packages/open-pix/php-sdk">
-        <image src="https://img.shields.io/packagist/php-v/open-pix/php-sdk?color=%2325c2a0&logo=php&label=open-pix/php-sdk">
-    </a>
-    <a href="https://packagist.org/packages/open-pix/php-sdk">
-        <image src="https://img.shields.io/packagist/dt/open-pix/php-sdk?color=%2325c2a0&logo=php">
-    </a>
-    <a href="https://packagist.org/packages/open-pix/php-sdk">
-        <image src="https://img.shields.io/packagist/v/open-pix/php-sdk?label=latest+version">
-    </a>
-    <a href="https://packagist.org/packages/open-pix/php-sdk">
-        <image src="https://img.shields.io/github/actions/workflow/status/Open-Pix/php-sdk/code-quality.yml?branch=main&label=tests&logo=github">
-    </a>
-</p>
+
+[![PHP version](https://img.shields.io/packagist/php-v/open-pix/php-sdk?color=%2325c2a0&logo=php&label=open-pix/php-sdk)](https://packagist.org/packages/open-pix/php-sdk)
+[![Download stats](https://img.shields.io/packagist/dt/open-pix/php-sdk?color=%2325c2a0&logo=php)](https://packagist.org/packages/open-pix/php-sdk)
+[![Latest release](https://img.shields.io/packagist/v/open-pix/php-sdk?label=latest+version)](https://packagist.org/packages/open-pix/php-sdk)
+[![CI status](https://img.shields.io/github/actions/workflow/status/Open-Pix/php-sdk/code-quality.yml?branch=main&label=tests&logo=github)](https://packagist.org/packages/open-pix/php-sdk)
 
 Welcome to the OpenPix PHP SDK! This SDK provides convenient access to the OpenPix REST API, allowing you to easily integrate payment services into your PHP applications.
 
 <p align="center">
-    <img src="example.png" width="700">
+    <img src="example.png" alt="usage example screenshot" width="700">
 </p>
 
 ## Documentation
+
 See [SDK documentation](https://developers.openpix.com.br/docs/sdk/php/sdk-php-what-is) and [Rest API documentation](https://developers.openpix.com.br/api).
 
 ## Installation
+
 Install the SDK with the necessary dependencies using Composer:
+
 ```bash
 $ composer require open-pix/php-sdk guzzlehttp/guzzle guzzlehttp/psr7
 ```
@@ -32,6 +26,7 @@ $ composer require open-pix/php-sdk guzzlehttp/guzzle guzzlehttp/psr7
 ## Basic usage
 
 Here is the basic usage of the SDK. See [SDK documentation](https://developers.openpix.com.br/docs/sdk/php/sdk-php-usage) for more details.
+
 ```php
 use OpenPix\PhpSdk\Client;
 
@@ -67,6 +62,7 @@ echo $result["brCode"] . "\n";
 ```
 
 ## Contributing
+
 We welcome contributions to the OpenPix PHP SDK! If you would like to contribute, please follow these steps:
 
 - Fork the repository
@@ -78,10 +74,13 @@ We welcome contributions to the OpenPix PHP SDK! If you would like to contribute
 Please make sure to adhere to the [code of conduct](#code-of-conduct).
 
 ## Code of Conduct
-Our Pledge
+
+### Our Pledge
+
 We pledge to make participation in our project and our community a harassment-free experience for everyone, regardless of age, body size, disability, ethnicity, gender identity and expression, level of experience, nationality, personal appearance, race, religion, or sexual identity and orientation.
 
-Our Standards
+### Our Standards
+
 Examples of behavior that contributes to creating a positive environment include:
 
 Using welcoming and inclusive language
@@ -101,13 +100,16 @@ As project maintainers, we are responsible for clarifying the standards of accep
 
 As contributors, you have the responsibility to adhere to these standards and report any instances of unacceptable behavior.
 
-Enforcement
+### Enforcement
+
 Instances of abusive, harassing, or otherwise unacceptable behavior may be reported to the project team at <developers@woovi.com>. The project team will review and investigate all complaints and will respond in a way that it deems appropriate to the circumstances. The project team is obligated to maintain confidentiality with regard to the reporter of an incident. Further details of specific enforcement policies may be posted separately.
 
 Project maintainers who do not follow or enforce the code of conduct in good faith may face temporary or permanent repercussions as determined by other members of the project's leadership.
 
-Attribution
+### Attribution
+
 This Code of Conduct is adapted from the Contributor Covenant, version 1.4, available at http://contributor-covenant.org/version/1/4.
 
 ## License
+
 MIT License.
