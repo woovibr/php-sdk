@@ -88,7 +88,7 @@ class Paginator implements Iterator
     }
 
     /**
-     * Get maxium amount of resources per page.
+     * Get maximum amount of resources per page.
      */
     public function getPerPageCount(): int
     {
