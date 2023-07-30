@@ -21,5 +21,8 @@
         <include>
             <directory suffix=".php">src/</directory>
         </include>
+        <report>
+            <html outputDirectory="html-coverage" lowUpperBound="50" highLowerBound="90" />
+        </report>
     </coverage>
 </phpunit>
