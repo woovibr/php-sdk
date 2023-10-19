@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.2](https://github.com/Open-Pix/php-sdk/compare/v1.1.1...v1.1.2) (2023-10-19)
+
+
+### Miscellaneous Chores
+
+* **deps:** allow psr/http-message ^1.0 ([#51](https://github.com/Open-Pix/php-sdk/issues/51)) ([54537ad](https://github.com/Open-Pix/php-sdk/commit/54537ad4a62b329397bf98daac6f29910aef4681))
+
 ## [1.1.1](https://github.com/Open-Pix/php-sdk/compare/v1.1.0...v1.1.1) (2023-06-26)
 
 
