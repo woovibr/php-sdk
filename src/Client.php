@@ -18,7 +18,7 @@ use OpenPix\PhpSdk\Resources\Refunds;
 class Client
 {
     // {x-release-please-start-version}
-    public const SDK_VERSION = "1.1.1";
+    public const SDK_VERSION = "1.1.2";
     // {x-release-please-end}
 
     public const BASE_URI = "https://api.openpix.com.br";
