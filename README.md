@@ -30,6 +30,9 @@ Here is the basic usage of the SDK. See [SDK documentation](https://developers.o
 ```php
 use OpenPix\PhpSdk\Client;
 
+// Load autoload of Composer.
+require_once __DIR__ . "/vendor/autoload.php";
+
 $client = Client::create("YOUR_APP_ID");
 
 // Create a customer.
