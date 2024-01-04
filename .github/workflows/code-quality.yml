@@ -26,12 +26,20 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
+          coverage: xdebug
 
       - name: Dependencies installation
         run: composer update --no-interaction --prefer-dist
 
       - name: Run PHPUnit
         run: composer test
+
+     - name: Upload to Codecov
+       uses: codecov/codecov-action@v2
+       with:
+         token: ${{ secrets.CODE_COV_TOKEN }}
+         files: ./coverage.xml
+         verbose: true
 
   lint-and-fix:
     name: Lint code and fix code style
