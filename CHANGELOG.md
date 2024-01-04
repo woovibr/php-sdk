@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.3](https://github.com/Open-Pix/php-sdk/compare/v1.1.2...v1.1.3) (2024-01-04)
+
+
+### Bug Fixes
+
+* **php:** add support for php 7.3 ([#54](https://github.com/Open-Pix/php-sdk/issues/54)) ([a3fbc66](https://github.com/Open-Pix/php-sdk/commit/a3fbc66c21c9b825e7f2e18a77409e28fff678cb))
+
 ## [1.1.2](https://github.com/Open-Pix/php-sdk/compare/v1.1.1...v1.1.2) (2023-10-19)
 
 
