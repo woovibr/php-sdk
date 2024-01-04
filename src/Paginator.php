@@ -34,14 +34,14 @@ class Paginator implements Iterator
 {
     /**
      * Transport used by HTTP requests.
-     * 
+     *
      * @var RequestTransport
      */
     private $requestTransport;
 
     /**
      * Last request sent to API.
-     * 
+     *
      * @var Request
      */
     private $listRequest;
@@ -55,14 +55,14 @@ class Paginator implements Iterator
 
     /**
      * Amount of resources to be skipped.
-     * 
+     *
      * @var int
      */
     private $skip = 0;
 
     /**
      * Amount of resources per page.
-     * 
+     *
      * @var int
      */
     private $perPage = 30;

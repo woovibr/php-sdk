@@ -18,7 +18,7 @@ class Webhooks
 
     /**
      * Request transport used to send HTTP requests.
-     * 
+     *
      * @var RequestTransport
      */
     private $requestTransport;

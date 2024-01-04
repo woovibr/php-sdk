@@ -15,7 +15,7 @@ class Customers
 {
     /**
      * Used to send HTTP requests to customers API.
-     * 
+     *
      * @var RequestTransport
      */
     private $requestTransport;

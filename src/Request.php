@@ -14,14 +14,14 @@ class Request
 {
     /**
      * The path to endpoint.
-     * 
+     *
      * @var string
      */
     private $path;
 
     /**
      * The HTTP method of endpoint.
-     * 
+     *
      * @var string
      */
     private $method;

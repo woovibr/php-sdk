@@ -13,7 +13,7 @@ class Charges
 {
     /**
      * The transport used by {@see Request}.
-     * 
+     *
      * @var RequestTransport
      */
     private $requestTransport;

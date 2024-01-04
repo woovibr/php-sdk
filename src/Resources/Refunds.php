@@ -15,7 +15,7 @@ class Refunds
 {
     /**
      * Transport used to send HTTP requests.
-     * 
+     *
      * @var RequestTransport
      */
     private $requestTransport;

@@ -15,7 +15,7 @@ class Transactions
 {
     /**
      * Used to send HTTP requests to transactions API.
-     * 
+     *
      * @var RequestTransport
      */
     private $requestTransport;

@@ -12,7 +12,7 @@ class Subscriptions
 {
     /**
      * Used to send HTTP requests.
-     * 
+     *
      * @var RequestTransport
      */
     private $requestTransport;
