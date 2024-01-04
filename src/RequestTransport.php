@@ -24,28 +24,38 @@ class RequestTransport
 
     /**
      * Underlying HTTP client.
+     *
+     * @var ClientInterface
      */
-    private ClientInterface $httpClient;
+    private $httpClient;
 
     /**
      * Request factory passed to API `Request` builder.
+     *
+     * @var RequestFactoryInterface
      */
-    private RequestFactoryInterface $requestFactory;
+    private $requestFactory;
 
     /**
      * Stream factory passed to API `Request` builder.
+     *
+     * @var StreamFactoryInterface
      */
-    private StreamFactoryInterface $streamFactory;
+    private $streamFactory;
 
     /**
      * Application ID.
+     *
+     * @var string
      */
-    private string $appId;
+    private $appId;
 
     /**
      * Base URI of all requests handled by RequestTransport.
+     *
+     * @var string
      */
-    private string $baseUri;
+    private $baseUri;
 
     /**
      * Create a new RequestTransport instance.

@@ -34,30 +34,38 @@ class Paginator implements Iterator
 {
     /**
      * Transport used by HTTP requests.
+     *
+     * @var RequestTransport
      */
-    private RequestTransport $requestTransport;
+    private $requestTransport;
 
     /**
      * Last request sent to API.
+     *
+     * @var Request
      */
-    private Request $listRequest;
+    private $listRequest;
 
     /**
      * Last result from API.
      *
      * @var array<mixed>|null
      */
-    private ?array $lastResult;
+    private $lastResult;
 
     /**
      * Amount of resources to be skipped.
+     *
+     * @var int
      */
-    private int $skip = 0;
+    private $skip = 0;
 
     /**
      * Amount of resources per page.
+     *
+     * @var int
      */
-    private int $perPage = 30;
+    private $perPage = 30;
 
     /**
      * Create a new `Paginator` instance.

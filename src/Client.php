@@ -23,7 +23,10 @@ class Client
 
     public const BASE_URI = "https://api.openpix.com.br";
 
-    private RequestTransport $requestTransport;
+    /**
+     * @var RequestTransport
+     */
+    private $requestTransport;
 
     /**
      * Create a new client from an application ID and base URI (by default is OpenPix).

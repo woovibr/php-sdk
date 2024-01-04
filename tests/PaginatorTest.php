@@ -24,7 +24,9 @@ final class PaginatorTest extends TestCase
     public function testNext(): void
     {
         $this->testPaginatorNavigation(
-            fn (Paginator $paginator) => $paginator->next(),
+            function (Paginator $paginator): void {
+                $paginator->next();
+            },
             30
         );
     }
@@ -32,7 +34,9 @@ final class PaginatorTest extends TestCase
     public function testPrevious(): void
     {
         $this->testPaginatorNavigation(
-            fn (Paginator $paginator) => $paginator->previous(),
+            function (Paginator $paginator): void {
+                $paginator->previous();
+            },
             0,
             30
         );
@@ -41,14 +45,20 @@ final class PaginatorTest extends TestCase
     public function testGo(): void
     {
         $this->testPaginatorNavigation(
-            fn (Paginator $paginator) => $paginator->go(2),
+            function (Paginator $paginator): void {
+                $paginator->go(2);
+            },
             60
         );
     }
 
     public function testRewind(): void
     {
-        $this->testPaginatorNavigation(fn (Paginator $paginator) => $paginator->rewind());
+        $this->testPaginatorNavigation(
+            function (Paginator $paginator): void {
+                $paginator->rewind();
+            }
+        );
     }
 
     public function testKey(): void

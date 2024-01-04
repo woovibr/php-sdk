@@ -15,8 +15,10 @@ class Refunds
 {
     /**
      * Transport used to send HTTP requests.
+     *
+     * @var RequestTransport
      */
-    private RequestTransport $requestTransport;
+    private $requestTransport;
 
     /**
      * Create a new Refunds instance.
@@ -111,7 +113,7 @@ class Refunds
      *      "value" => 0,
      *      // Your transaction ID, or endToEnd ID, to keep track of this refund.
      *      "transactionEndToEndId" => "",
-     *      // Your correlation ID, unique identifier refund
+     *      // Your correlation ID, unique identifier refund.
      *      "correlationID" => "",
      *      // Comment of this refund. Maximum length of 140 characters.
      *      "comment" => "",

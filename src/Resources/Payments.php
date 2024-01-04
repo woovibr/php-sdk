@@ -15,8 +15,10 @@ class Payments
 {
     /**
      * Used to send HTTP requests to the payments API.
+     *
+     * @var RequestTransport
      */
-    private RequestTransport $requestTransport;
+    private $requestTransport;
 
     /**
      * Create a new Payments instance.

@@ -13,8 +13,10 @@ class Charges
 {
     /**
      * The transport used by {@see Request}.
+     *
+     * @var RequestTransport
      */
-    private RequestTransport $requestTransport;
+    private $requestTransport;
 
     /**
      * Create a new Charges instance.
