@@ -15,8 +15,10 @@ class Customers
 {
     /**
      * Used to send HTTP requests to customers API.
+     * 
+     * @var RequestTransport
      */
-    private RequestTransport $requestTransport;
+    private $requestTransport;
 
     /**
      * Create a new Customers instance.

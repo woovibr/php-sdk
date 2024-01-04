@@ -14,20 +14,24 @@ class Request
 {
     /**
      * The path to endpoint.
+     * 
+     * @var string
      */
-    private string $path;
+    private $path;
 
     /**
      * The HTTP method of endpoint.
+     * 
+     * @var string
      */
-    private string $method;
+    private $method;
 
     /**
      * Query parameters to set into URI on request build.
      *
      * @var array<mixed>
      */
-    private array $queryParams = [];
+    private $queryParams = [];
 
     /**
      * Body of request.
