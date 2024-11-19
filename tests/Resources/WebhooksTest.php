@@ -73,6 +73,26 @@ final class WebhooksTest extends TestCase
         $this->assertSame(["webhook" => []], $result);
     }
 
+    public function testIps(): void
+    {
+        $requestTransportMock = $this->createMock(RequestTransport::class);
+        $requestTransportMock->expects($this->once())
+            ->method("transport")
+            ->willReturnCallback(function (Request $request) {
+                $this->assertSame("GET", $request->getMethod());
+                $this->assertSame("/api/v1/webhook/ips", $request->getPath());
+                $this->assertSame(null, $request->getBody());
+                $this->assertSame([], $request->getQueryParams());
+
+                return ["ips" => []];
+            });
+
+        $webhooks = new Webhooks($requestTransportMock);
+        $result = $webhooks->ips();
+
+        $this->assertSame(["ips" => []], $result);
+    }
+
     public function testIsWebhookValidReturnsTrueWithValidWebhook(): void
     {
         $webhooks = new Webhooks($this->createStub(RequestTransport::class));
