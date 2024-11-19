@@ -142,6 +142,35 @@ class Webhooks
     }
 
     /**
+     * Get a list of webhook IPs.
+     *
+     * ## Usage
+     * ```php
+     * $result = $client->webhooks()->ips();
+     *
+     * foreach ($result["ips"] as $ip) {
+     *     echo $ip; // string
+     * }
+     *
+     * $result["ips"][0]; // "189.51.60.9"
+     * $result["ips"][1]; // "138.97.124.129"
+     * $result["ips"][2]; // "177.71.136.66"
+     * ```
+     *
+     * @link https://developers.openpix.com.br/api#tag/webhook/paths/~1api~1v1~1webhook~1ips/get
+     *
+     * @return array<string, mixed>
+     */
+    public function ips(): array
+    {
+        $request = (new Request())
+            ->method("GET")
+            ->path("/api/v1/webhook/ips");
+
+        return $this->requestTransport->transport($request);
+    }
+
+    /**
      * Validate webhook signature.
      *
      * Every Webhook request has the header `x-webhook-signature` which is the signature
