@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.4](https://github.com/Open-Pix/php-sdk/compare/v1.1.3...v1.1.4) (2024-11-19)
+
+### Webhook IPs
+
+* Added a method to retrieve the IPs used by Webhooks to send notifications [#56](https://github.com/woovibr/php-sdk/pull/56)
+
+
 ## [1.1.3](https://github.com/Open-Pix/php-sdk/compare/v1.1.2...v1.1.3) (2024-01-04)
 
 
