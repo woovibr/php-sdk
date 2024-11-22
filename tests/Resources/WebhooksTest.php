@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests;
+namespace Tests\Resources;
 
 use OpenPix\PhpSdk\Request;
 use OpenPix\PhpSdk\RequestTransport;
