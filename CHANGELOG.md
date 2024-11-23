@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.1.5](https://github.com/Open-Pix/php-sdk/compare/v1.1.4...v1.1.5) (2024-11-25)
+
+### Partners Resource
+
+* Partners Resource has been added...
+
 ## [1.1.4](https://github.com/Open-Pix/php-sdk/compare/v1.1.3...v1.1.4) (2024-11-19)
 
 ### Webhook IPs
