@@ -5,6 +5,7 @@ namespace OpenPix\PhpSdk;
 use OpenPix\PhpSdk\RequestTransport;
 use OpenPix\PhpSdk\Resources\Charges;
 use OpenPix\PhpSdk\Resources\Customers;
+use OpenPix\PhpSdk\Resources\Partners;
 use OpenPix\PhpSdk\Resources\Transactions;
 use OpenPix\PhpSdk\Resources\Subscriptions;
 use OpenPix\PhpSdk\Resources\Webhooks;
@@ -112,5 +113,13 @@ class Client
     public function webhooks(): Webhooks
     {
         return new Webhooks($this->requestTransport);
+    }
+
+    /**
+     * Returns operations for the `Partners` resource.
+     */
+    public function partners(): Partners
+    {
+        return new Partners($this->requestTransport);
     }
 }
