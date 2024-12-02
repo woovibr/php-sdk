@@ -4,7 +4,8 @@
 
 ### Partners Resource
 
-* Partners Resource has been added.
+* Partners Resource. [#58](https://github.com/woovibr/php-sdk/pull/58)
+* php 8.3 and 8.4 added to code quality workflow. [#59](https://github.com/woovibr/php-sdk/pull/59)
 
 
 ## [1.1.4](https://github.com/Open-Pix/php-sdk/compare/v1.1.3...v1.1.4) (2024-11-19)
