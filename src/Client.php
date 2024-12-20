@@ -3,6 +3,7 @@
 namespace OpenPix\PhpSdk;
 
 use OpenPix\PhpSdk\RequestTransport;
+use OpenPix\PhpSdk\Resources\Accounts;
 use OpenPix\PhpSdk\Resources\Charges;
 use OpenPix\PhpSdk\Resources\Customers;
 use OpenPix\PhpSdk\Resources\Partners;
@@ -121,5 +122,13 @@ class Client
     public function partners(): Partners
     {
         return new Partners($this->requestTransport);
+    }
+
+    /**
+     * Returns operations for the `Accounts` resource.
+     */
+    public function accounts(): Accounts
+    {
+        return new Accounts($this->requestTransport);
     }
 }
