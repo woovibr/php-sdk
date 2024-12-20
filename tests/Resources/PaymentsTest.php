@@ -64,4 +64,30 @@ final class PaymentsTest extends TestCase
 
         $this->assertSame(["payment" => []], $result);
     }
+
+    public function testApprove(): void
+    {
+        $correlationID = '42';
+
+        $requestBody = [
+            "correlationID" => $correlationID,
+        ];
+
+        $requestTransportMock = $this->createMock(RequestTransport::class);
+        $requestTransportMock->expects($this->once())
+            ->method("transport")
+            ->willReturnCallback(function (Request $request) use ($requestBody) {
+                $this->assertSame("POST", $request->getMethod());
+                $this->assertSame("/api/v1/payment/approve", $request->getPath());
+                $this->assertSame($request->getBody(), $requestBody);
+                $this->assertSame($request->getQueryParams(), []);
+
+                return ["payment" => []];
+            });
+
+        $payments = new Payments($requestTransportMock);
+        $result = $payments->approve($correlationID);
+
+        $this->assertSame(["payment" => []], $result);
+    }
 }
