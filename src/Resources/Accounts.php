@@ -54,7 +54,7 @@ class Accounts
     {
         $request = (new Request())
             ->method("GET")
-            ->path("/api/v1/accounts");
+            ->path("/api/v1/account");
 
         return $this->requestTransport->transport($request);
     }

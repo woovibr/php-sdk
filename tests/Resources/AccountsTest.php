@@ -41,7 +41,7 @@ final class AccountsTest extends TestCase
             ->method("transport")
             ->willReturnCallback(function (Request $request) use ($accounts) {
                 $this->assertSame("GET", $request->getMethod());
-                $this->assertSame("/api/v1/accounts", $request->getPath());
+                $this->assertSame("/api/v1/account", $request->getPath());
                 $this->assertSame($request->getBody(), null);
                 $this->assertSame($request->getQueryParams(), []);
 
