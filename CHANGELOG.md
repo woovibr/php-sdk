@@ -5,6 +5,8 @@
 ### Partners Resource
 
 * Partners Resource. [#58](https://github.com/woovibr/php-sdk/pull/58)
+* Accounts Resource. [#62](https://github.com/woovibr/php-sdk/pull/52)
+* approve() method added to Payments resource. [#61](https://github.com/woovibr/php-sdk/pull/51)
 * php 8.3 and 8.4 added to code quality workflow. [#59](https://github.com/woovibr/php-sdk/pull/59)
 
 
