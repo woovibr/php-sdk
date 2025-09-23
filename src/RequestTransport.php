@@ -100,7 +100,7 @@ class RequestTransport
 
         $response = $this->httpClient->sendRequest($request);
 
-        return $this->hydrateResponse($response);
+        return $this->hydrateResponse($request, $response);
     }
 
     /**
@@ -127,7 +127,7 @@ class RequestTransport
      *
      * @return array<string, mixed>
      */
-    private function hydrateResponse(ResponseInterface $response): array
+    private function hydrateResponse(RequestInterface $request, ResponseInterface $response): array
     {
         $contents = json_decode($response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR);
 
@@ -142,7 +142,7 @@ class RequestTransport
                 $error = $error["message"];
             }
 
-            throw new ApiErrorException($error);
+            throw ApiErrorException::from($error, $request, $response);
         }
 
         return $contents;
