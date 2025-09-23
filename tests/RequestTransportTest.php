@@ -89,10 +89,15 @@ final class RequestTransportTest extends TestCase
         $requestMock
             ->method("withAddedHeader")
             ->willReturn($requestMock);
+        $requestMock
+            ->method("getRequestTarget")
+            ->willReturn("target");
+
+        $encodedResponse = json_encode(["error" => $error]);
 
         $responseMock = $this->createConfiguredMock(ResponseInterface::class, [
             "getBody" => $this->createConfiguredMock(StreamInterface::class, [
-                "getContents" => json_encode(["error" => $error]),
+                "getContents" => $encodedResponse,
             ]),
             "getStatusCode" => 400,
             "getReasonPhrase" => "Bad request",
@@ -112,6 +117,13 @@ final class RequestTransportTest extends TestCase
             $this->createMock(StreamFactoryInterface::class),
         );
 
-        $requestTransport->transport($requestMock);
+        try {
+            $requestTransport->transport($requestMock);
+        } catch (ApiErrorException $e) {
+            $this->assertSame($e->getHttpRequest()->getRequestTarget(), "target");
+            $this->assertSame($e->getHttpResponse()->getBody()->getContents(), $encodedResponse);
+
+            throw $e;
+        }
     }
 }
