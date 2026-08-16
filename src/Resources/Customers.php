@@ -109,6 +109,18 @@ class Customers
      *
      * @return array<string, mixed> Result from API.
      */
+    public function update(array $data): array
+    {
+        $correlationID = $data["correlationID"];
+        unset($data["correlationID"]);
+        
+        $request = (new Request())
+            ->method("PATCH")
+            ->path("/api/v1/customer/".$correlationID)
+            ->body($data);
+
+        return $this->requestTransport->transport($request);
+    }
     public function create(array $data): array
     {
         $request = (new Request())
