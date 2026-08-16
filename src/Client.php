@@ -12,6 +12,7 @@ use OpenPix\PhpSdk\Resources\Subscriptions;
 use OpenPix\PhpSdk\Resources\Webhooks;
 use OpenPix\PhpSdk\Resources\Payments;
 use OpenPix\PhpSdk\Resources\Refunds;
+use OpenPix\PhpSdk\Resources\Subaccounts;
 
 /**
  * The client provides a list of "resources", objects that allow it to send requests to
@@ -130,5 +131,13 @@ class Client
     public function accounts(): Accounts
     {
         return new Accounts($this->requestTransport);
+    }
+
+    /**
+     * Returns operations for the `Subaccounts` resource.
+     */
+    public function subaccounts(): Subaccounts
+    {
+        return new Subaccounts($this->requestTransport);
     }
 }
