@@ -2,13 +2,14 @@
 
 namespace OpenPix\PhpSdk\Resources;
 
+use OpenPix\PhpSdk\Paginator;
 use OpenPix\PhpSdk\Request;
 use OpenPix\PhpSdk\RequestTransport;
 
 /**
  * Operations on subaccounts.
  *
- * @link https://developers.openpix.com.br/api#tag/subaccount
+ * @link https://developers.woovi.com/api#tag/subaccount
  */
 class Subaccounts
 {
@@ -30,41 +31,47 @@ class Subaccounts
     }
 
     /**
-     * Get a list of subaccounts.
+     * Return an {@see Paginator} with subaccount list.
      *
      * ## Usage
      * ```php
-     * $result = $client->subaccounts()->list();
+     * $paginator = $client->subaccounts()->list();
      *
-     * foreach ($result["subAccounts"] as $subAccount) {
-     *     $subAccount["name"]; // string
-     *     $subAccount["pixKey"]; // string
-     *     $subAccount["balance"]; // int
+     * foreach ($paginator as $page) {
+     *     foreach ($page["subAccounts"] as $subAccount) {
+     *         $subAccount["name"]; // string
+     *         $subAccount["pixKey"]; // string
+     *         $subAccount["balance"]; // int
+     *     }
      * }
      * ```
      *
      * @link https://developers.woovi.com/api#tag/subaccount/GET/api/v1/subaccount
      *
-     * @return array<string, mixed> Result from API.
+     * @param array<string, mixed> $queryParams Query parameters.
+     *
+     * @return Paginator Paginated result from API.
      */
-    public function list(): array
+    public function list(array $queryParams = []): Paginator
     {
         $request = (new Request())
             ->method("GET")
-            ->path("/api/v1/subaccount");
+            ->path("/api/v1/subaccount")
+            ->queryParams($queryParams);
 
-        return $this->requestTransport->transport($request);
+        return new Paginator($this->requestTransport, $request);
     }
 
     /**
-     * Get an subaccount via pix key.
+     * Get a subaccount via pix key.
      *
      * ```php
      * $result = $client->subaccounts()->getOne("pixKey");
      *
-     * $result["subaccount"]["name"]; // string
-     * $result["subaccount"]["pixKey"]; // boolean
-     * $result["subaccount"]["balance"]; // int
+     * $result["subAccount"]["name"]; // string
+     * $result["subAccount"]["pixKey"]; // string
+     * $result["subAccount"]["balance"]; // int
+     * $result["subAccount"]["withdrawBlocked"]; // bool|null
      * ```
      *
      * @link https://developers.woovi.com/api#tag/subaccount/GET/api/v1/subaccount/{id}
@@ -101,11 +108,11 @@ class Subaccounts
      * @link https://developers.woovi.com/api#tag/subaccount/POST/api/v1/subaccount/{id}/withdraw
      *
      * @param string $id Pix key registered to the subaccount.
-     * @param array<string, mixed> $data Data to make a withdraw partial.
+     * @param array<string, mixed> $data Data to make a withdraw partial. Omit `value` to withdraw the full balance.
      *
      * @return array<string, mixed> Result from API.
      */
-    public function withdraw(string $id, array $data): array
+    public function withdraw(string $id, array $data = []): array
     {
         $request = (new Request())
             ->method("POST")
@@ -123,13 +130,10 @@ class Subaccounts
      *     "name" => "Name of the sub account",
      *     "pixKey" => "The pix key of the sub account",
      * ]);
-     *
-     * // Number in cents that represent the balance of the sub account
-     * $result["SubAccount"]["balance"]; // int
      * // Name of the sub account
-     * $result["SubAccount"]["name"]; // string
+     * $result["subAccount"]["name"]; // string
      * // The pix key for the sub account
-     * $result["SubAccount"]["pixKey"]; // string
+     * $result["subAccount"]["pixKey"]; // string
      * ```
      *
      * @link https://developers.woovi.com/api#tag/subaccount/POST/api/v1/subaccount
@@ -154,8 +158,8 @@ class Subaccounts
      * ```php
      * $result = $client->subaccounts()->delete("pixKey");
      *
-     * $result["subaccount"]["pixKey"]; // string
-     * $result["subaccount"]["status"]; // string
+     * $result["pixKey"]; // string
+     * $result["status"]; // string. e.g.: OK
      * ```
      *
      * @link https://developers.woovi.com/api#tag/subaccount/DELETE/api/v1/subaccount/{id}
@@ -233,7 +237,7 @@ class Subaccounts
      * $result["originSubaccount"]["balance"]; // int.
      * ```
      *
-     * @link https://developers.woovi.com/api#tag/subaccount/POST/api/v1/subaccount/{id}/transfer
+     * @link https://developers.woovi.com/api#tag/subaccount/POST/api/v1/subaccount/transfer
      *
      * @param array<string, mixed> $data Data to make a new transfer between subaccounts
      *

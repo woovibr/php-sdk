@@ -1,6 +1,6 @@
 <?php
 
-namespace Resources;
+namespace Tests\Resources;
 
 use OpenPix\PhpSdk\Request;
 use OpenPix\PhpSdk\RequestTransport;
@@ -11,38 +11,21 @@ final class SubaccountsTest extends TestCase
 {
     public function testList(): void
     {
-        $subaccountsResponse = [
-            "subAccounts" => [
-                "name" => "test-sub-account",
-                "pixKey" => "c4249323-b4ca-43f2-8139-8232aab09b93",
-                "balance" => 100
-            ],
-        ];
-
         $requestTransportMock = $this->createMock(RequestTransport::class);
-        $requestTransportMock->expects($this->once())
-            ->method("transport")
-            ->willReturnCallback(function (Request $request) use ($subaccountsResponse) {
-                $this->assertSame("GET", $request->getMethod());
-                $this->assertSame("/api/v1/subaccount", $request->getPath());
-                $this->assertSame($request->getBody(), null);
-                $this->assertSame($request->getQueryParams(), []);
-
-                return $subaccountsResponse;
-            });
 
         $subaccounts = new Subaccounts($requestTransportMock);
+        $pagedRequest = $subaccounts->list()->getPagedRequest();
 
-        $result = $subaccounts->list();
-
-        $this->assertSame($result, $subaccountsResponse);
+        $this->assertSame($pagedRequest->getPath(), "/api/v1/subaccount");
+        $this->assertSame($pagedRequest->getMethod(), "GET");
+        $this->assertSame($pagedRequest->getBody(), null);
     }
 
     public function testGetOne(): void
     {
         $subaccountId = "356a192b7913b04c54574d18c28d46e6395428ab";
         $subaccount = [
-            "SubAccount" => [
+            "subAccount" => [
                 "name" => "test-sub-account",
                 "pixKey" => $subaccountId,
                 "balance" => 100,
@@ -224,7 +207,7 @@ final class SubaccountsTest extends TestCase
         ];
 
         $createResponse = [
-            "SubAccount" => [
+            "subAccount" => [
                 "name" => "Name of subaccount",
                 "pixKey" => "356a192b7913b04c54574d18c28d46e6395428ab",
             ],
