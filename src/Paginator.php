@@ -27,7 +27,7 @@ use TypeError;
  * $result = $paginator->current();
  * ```
  *
- * @implements Iterator<int, array<mixed>>
+ * @implements Iterator<int, array<array>>
  * @phpstan-type Pagination array{skip: int, limit: int, totalCount: int, hasPreviousPage: bool, hasNextPage: bool}
  */
 class Paginator implements Iterator
@@ -180,7 +180,7 @@ class Paginator implements Iterator
             return true;
         }
 
-        return $this->getPagination()["hasNextPage"];
+        return $this->skip < $this->getPagination()["totalCount"];
     }
 
     /**
