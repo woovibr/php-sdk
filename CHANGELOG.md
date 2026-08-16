@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.0](https://github.com/woovibr/php-sdk/compare/v1.1.4...v1.2.0) (2026-08-16)
+
+
+### Features
+
+* **subaccounts:** add resource for managing subaccounts ([#68](https://github.com/woovibr/php-sdk/issues/68)) ([d0ed796](https://github.com/woovibr/php-sdk/commit/d0ed79616eee78363920093ac9898975b9e47416))
+
 ## [1.1.5](https://github.com/Open-Pix/php-sdk/compare/v1.1.4...v1.1.5) (2024-11-26)
 
 ### Partners Resource

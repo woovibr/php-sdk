@@ -21,7 +21,7 @@ use OpenPix\PhpSdk\Resources\Subaccounts;
 class Client
 {
     // {x-release-please-start-version}
-    public const SDK_VERSION = "1.1.5";
+    public const SDK_VERSION = "1.2.0";
     // {x-release-please-end}
 
     public const BASE_URI = "https://api.openpix.com.br";
